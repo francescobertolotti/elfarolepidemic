@@ -10,7 +10,7 @@ def go(par, gv, al):
     for person in al.persons_list: person.decisionAttendingBar(gv, par) 
 
     # 3 - Updating strategy of the present agents
-    gv.update_present_agents_strategy()
+    gv.update_present_agents_strategy(par)
     for person in al.persons_list: person.updateLastStrategy(gv)
 
     # 4 - Agents get infected

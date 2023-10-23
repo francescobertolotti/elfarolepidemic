@@ -2,7 +2,6 @@
 # 1) sostiuire debugId con who
 # 2) cambiare SIR con altro
 # 3) self.considerSirTime = True
-# 4) timeContagious è stato tolto, adesso c'è solo contagious_duration
 
 # COSE DA GGIUNGERE
 # 0) testare altre strategie decisionali per gli agenti
@@ -33,7 +32,7 @@ class model():
         random.seed(my_seed)
         setup(self.par, self.gv, self.al)
 
-        #for _ in range(self.par.max_week): go(self.par, self.gv, self.al)
+        for _ in range(self.par.max_week): go(self.par, self.gv, self.al)
 
         conclusion(self.par, self.gv, self.al)
 
