@@ -42,7 +42,7 @@ class glob_vars:
 
 
     
-    def initialize_gv(self)
+    def initialize_gv(self):
         self.attendance = 0 # This integer rapresent the n of the agents going to the bar
         self.present_agents = [] # This is the array containing al the agents that will be in the bar each week
         self.infected_attendance = 0 # This integer rapresent the n of the agents which are infected each week
