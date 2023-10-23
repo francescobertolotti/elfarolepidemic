@@ -89,7 +89,7 @@ class Person:
     def getContagiousLevel(self, current_week: int = -1): # This functions calculates the level of contagious for the agents every week
         if current_week == -1:
             raise Exception('Contagious level error')
-            
+        
         if self.ContagiousWillStopAt - current_week >= 0:
 
             x, x_max = 0.1, 1
@@ -107,14 +107,13 @@ class Person:
             return x
             
         else:
-            if self.levelContagious > 0:
-                self.levelContagious = 0
-                self.ContagiousWillStopAt = 0
-                self.infectionStartingWeek = 0
-                self.SIRWillStopAt = self.SirTime + current_week
-
+            self.levelContagious = 0
+            self.ContagiousWillStopAt = 0
+            self.infectionStartingWeek = 0
+            self.SIRWillStopAt = self.SirTime + current_week
+            
             return 0
-
+        
     def getIfInfected(self): # This function returns a boolean that indicates if the agent is infected
         if self.levelContagious > 0:
             return True

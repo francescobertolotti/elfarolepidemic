@@ -35,6 +35,7 @@ class glob_vars:
             if agent.getIfInfected():
                 self.infected_attendance += 1
         
+        self.attendance = len(self.present_agents)
         self.attendance_history.append(self.attendance)
         self.contagious_history.append(self.infected_attendance)
 

@@ -4,8 +4,8 @@ class parameters:
     def __init__(self):
 
         # simulation parameters
-        self.max_week = 100
-        self.n_persons = 100
+        self.max_week = 90
+        self.n_persons = 90
 
         # social parameters
         self.capacity = 50 # This integer represent the maximum capacity of the bar (is userfull if respect_the_max: bool = True)

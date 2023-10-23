@@ -18,7 +18,8 @@ def go(par, gv, al):
 
     # 5 - Update output
     gv.compute_globals(al, par)
-        
+    
+    gv.t += 1
 
 
 
