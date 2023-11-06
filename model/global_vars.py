@@ -20,7 +20,6 @@ class glob_vars:
         self.present_contagious_history = [] # This array is composed from a series of integers rapresenting the number of contagious people in the bar
 
 
-
     def compute_globals(self, al, par):
 
         n_infected_agents = 0                
@@ -36,6 +35,7 @@ class glob_vars:
                 self.infected_attendance += 1
         
         self.attendance = len(self.present_agents)
+        # print('week %d, attendance %d, infected_attendance %d' % (self.t, self.attendance, self.infected_attendance))
         self.attendance_history.append(self.attendance)
         self.contagious_history.append(self.infected_attendance)
 

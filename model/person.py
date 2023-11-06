@@ -43,7 +43,8 @@ class Person:
     
     def personCurrentStrategy(self, par) -> float: # This function is a wrapper for personStrategyOutput and memoryMean
         self.personStrategyOutput()
-        return self.memoryMean(par)
+        memoryMeanF = self.memoryMean(par)
+        return memoryMeanF
     
     def updateLastStrategy(self, gv) -> None: # In case an agent goes to the bar, this function updates the strategy of the agent
         if len(self.person_memory) > 0:
@@ -126,17 +127,19 @@ class Person:
     def decisionAttendingBar(self, gv, par):
         
         # if the attenance is already above the bar capacity and it is taken into consideration by agents, do not try to attend
-        if gv.attendance > par.capacity and par.respect_the_max: return
+        if gv.attendance >= par.capacity and par.respect_the_max:
+            return
 
-        a_strat = self.personCurrentStrategy(par) # This float rapresent the strategy of agent each week
-        
-        c_level = 0 # This float rapresent the contagious level of agent each week
-        if self.getIfInfected(): # If agent is infected
-            c_level = self.getContagiousLevel(current_week=gv.t) # Calculate contagious level
+        else:
+            a_strat = self.personCurrentStrategy(par) # This float rapresent the strategy of agent each week
+                
+            c_level = 0 # This float rapresent the contagious level of agent each week
+            if self.getIfInfected(): # If agent is infected
+                c_level = self.getContagiousLevel(current_week=gv.t) # Calculate contagious level
 
-        if a_strat < par.threshold and c_level <= par.infection_thresholdNotPresent: # If the agent strategy for this week and contagious level is below the not present threshold, he will be in the bare.
-            gv.attendance += 1
-            gv.present_agents.append(self)
+            if a_strat < par.threshold and c_level <= par.infection_thresholdNotPresent: # If the agent strategy for this week and contagious level is below the not present threshold, he will be in the bare.
+                gv.attendance += 1
+                gv.present_agents.append(self)
 
 
 
