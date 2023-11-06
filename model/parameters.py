@@ -10,7 +10,7 @@ class parameters:
         # social parameters
         self.capacity = 50 # This integer represent the maximum capacity of the bar (is userfull if respect_the_max: bool = True)
         self.threshold = 0.5 # This threshold is used to determine if an agent will go to the bar or not depending on his strategy
-        self.respect_the_max = False # This boolean rapresent if the bar capacity will be respected or not
+        self.respect_the_max = True # This boolean rapresent if the bar capacity will be respected or not
 
         # epidemic parameters
         self.num_infected_persons = 2 # Identifies the number of starting contagious people
