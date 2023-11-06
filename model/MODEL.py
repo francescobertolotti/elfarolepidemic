@@ -1,5 +1,4 @@
 # TO-DO LIST
-# 1) contagiuslevel cambiare nome
 # 2) cambiare SIR con altro
 
 # COSE DA GGIUNGERE

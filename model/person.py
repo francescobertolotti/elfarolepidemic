@@ -35,6 +35,7 @@ class Person:
                 sum_d += r_Weight
             sum_n += (last_s * par.people_memory_weight)
             sum_d += par.people_memory_weight
+            
             return sum_n / sum_d
         
         else:
@@ -54,10 +55,10 @@ class Person:
     #par, gv
     def initiateContagius(self, par, gv) -> bool: # This function is needed to initiate the contagious for the agent (returns a boolean that indicates if the contagious was executed)
         infectAgentDecisionSIR = False
-        contagiousTime = par.contagious_duration
+        contagiousTime = par.infection_duration
         infectionStartingWeek = gv.t
-        if par.agentSIR:
-            if par.SirTime != 0:
+        if par.infection_generatesResistance:
+            if par.infection_cantStartUntil != 0:
                 if infectionStartingWeek >= self.SIRWillStopAt:
                     infectAgentDecisionSIR = True
             else:
@@ -78,9 +79,9 @@ class Person:
             
             self.SIR_infectionsCounter += 1 # Counts how many time the agent gets infected
 
-            if par.agentSIR:
-                if par.SirTime != 0:
-                    self.SIRWillStopAt = par.SirTime + self.ContagiousWillStopAt + 1
+            if par.infection_generatesResistance:
+                if par.infection_cantStartUntil != 0:
+                    self.SIRWillStopAt = par.infection_cantStartUntil + self.ContagiousWillStopAt + 1
             return True
         else:
             return False
@@ -110,7 +111,7 @@ class Person:
             self.levelContagious = 0
             self.ContagiousWillStopAt = 0
             self.infectionStartingWeek = 0
-            self.SIRWillStopAt = self.SirTime + current_week
+            self.SIRWillStopAt = self.infection_cantStartUntil + current_week
             
             return 0
         
@@ -133,7 +134,7 @@ class Person:
         if self.getIfInfected(): # If agent is infected
             c_level = self.getContagiousLevel(current_week=gv.t) # Calculate contagious level
 
-        if a_strat < par.threshold and c_level <= par.contagious_thresholdNotPresent: # If the agent strategy for this week and contagious level is below the not present threshold, he will be in the bare.
+        if a_strat < par.threshold and c_level <= par.infection_thresholdNotPresent: # If the agent strategy for this week and contagious level is below the not present threshold, he will be in the bare.
             gv.attendance += 1
             gv.present_agents.append(self)
 
@@ -161,7 +162,7 @@ class Person:
         totInfectedWeekByAgent = 0 # This is a counter for people infected this week by each agent
         for present_infectious_agent in gv.present_agents: # For each infectous agents between the present agents
             totInfectedWeekByAgent = n_new_infected
-            if present_infectious_agent.levelContagious >= par.contagious_threshold and present_infectious_agent.levelContagious <= par.contagious_thresholdNotPresent: # If the agent can infect other agents
+            if present_infectious_agent.levelContagious >= par.infection_threshold and present_infectious_agent.levelContagious <= par.infection_thresholdNotPresent: # If the agent can infect other agents
                 for present_agent in gv.present_agents: # For each present agent
                     if present_agent.getIfInfected() == False: # If not infected
                         if totInfectedWeekByAgent > 0: # InitiateContagious for n_new_infected agents
