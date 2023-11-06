@@ -1,5 +1,4 @@
 # TO-DO LIST
-# 2) cambiare SIR con altro
 
 # COSE DA GGIUNGERE
 # 0) testare altre strategie decisionali per gli agenti

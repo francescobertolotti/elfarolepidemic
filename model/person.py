@@ -49,7 +49,7 @@ class Person:
         if len(self.person_memory) > 0:
             self.person_memory.pop(len(self.person_memory) - 1)
         else:
-            print('Error memory arr day:%d agent:%d' % (gv.t, self.who))
+            print('Error memory arr day:%d agent:%d memory:%s' % (gv.t, self.who, self.person_memory))
         self.person_memory.append(gv.present_agents_strategy)
     
     #par, gv

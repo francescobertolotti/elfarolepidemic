@@ -11,7 +11,7 @@ def go(par, gv, al):
 
     # 3 - Updating strategy of the present agents
     gv.update_present_agents_strategy(par)
-    for person in al.persons_list: person.updateLastStrategy(gv)
+    for person in gv.present_agents: person.updateLastStrategy(gv)
 
     # 4 - Agents get infected
     person.infection_dynamics(gv, par, al)
