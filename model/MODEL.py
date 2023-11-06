@@ -1,5 +1,4 @@
 # TO-DO LIST
-# Prova
 
 # COSE DA GGIUNGERE
 # 0) testare altre strategie decisionali per gli agenti
