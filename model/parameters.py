@@ -19,8 +19,7 @@ class parameters:
         self.infection_threshold = 0.5 # Another person gets contagious if his contagious level is greather than contagious_threshold
         self.infection_thresholdNotPresent = 0.7 # the level beyond which an agent is not going to the bar
         self.infection_duration = 10 # An agent is contagious for infection_duration weeks
-        self.people_memory_weight = 0.7 # This is the weight agents give to each single event
-
+        self.people_memory_weight_arr = [0.5, 0.2, 0.1] # This is the weight agents give to each single event
 
 
 

@@ -1,5 +1,6 @@
 #import libraries
 import random
+import numpy as np
 
 class Person:
     def __init__(self):
@@ -24,19 +25,42 @@ class Person:
         
     
     def memoryMean(self, par) -> float: # This function returns the actual strategy composed by the last strategy and the ol strategies of the past weeks. This is done through a weighed average.
+
         if len(self.person_memory) > 1:
-            last_s = self.person_memory[len(self.person_memory) - 1]
-            r_Weight = (1 - par.people_memory_weight)
-            sum_n = 0 
-            sum_d = 0
-            for i in range(0, len(self.person_memory) - 1):
-                x = self.person_memory[i]
-                sum_n += (x * r_Weight)
-                sum_d += r_Weight
-            sum_n += (last_s * par.people_memory_weight)
-            sum_d += par.people_memory_weight
+            compiled_memory = []
+            compiled_memory_sub = []
+            general_weight = (1 - np.sum(par.people_memory_weight_arr)) / (len(self.person_memory) - len(par.people_memory_weight_arr))
+            if len(self.person_memory) > len(par.people_memory_weight_arr):
+                prov_people_memory_weight_arr = par.people_memory_weight_arr
+            else:
+                prov_people_memory_weight_arr = []
+                cont_sub = 0
+                sub_bool = True
+                for i, el in enumerate(par.people_memory_weight_arr):
+                    if i < len(self.person_memory) - 1:
+                        prov_people_memory_weight_arr.append(el)
+                        cont_sub += el
+                    elif sub_bool:
+                        sub_bool = False
+                        prov_people_memory_weight_arr.append(1 - cont_sub)
+                        
+            for i, el in enumerate(self.person_memory):
+                if i < (len(self.person_memory) - len(prov_people_memory_weight_arr)):
+                    compiled_memory.append(el * general_weight)
+                    compiled_memory_sub.append(general_weight)
+                else:
+                    compiled_memory.append(el * (prov_people_memory_weight_arr[len(self.person_memory) - 1 - i])) 
+                    compiled_memory_sub.append(prov_people_memory_weight_arr[len(self.person_memory) - 1 - i])    
+
+                        
             
-            return sum_n / sum_d
+            ris = np.sum(compiled_memory)
+            sub = np.sum(compiled_memory_sub)
+            if sub < 0.9999 or sub > 1.0001:
+                print("Errore, sub = %.2f, len(sefl.person_memory) = %d" % (sub, len(self.person_memory)))
+            
+            
+            return ris
         
         else:
             return self.person_memory[0]
