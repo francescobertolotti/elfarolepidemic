@@ -21,7 +21,10 @@ class parameters:
         self.infection_duration = 10 # An agent is contagious for infection_duration weeks
         self.people_memory_weight_arr = [0.5, 0.2, 0.1] # This is the weight agents give to each single event
 
-
+        #AgentDecision parameters
+        self.useRegr = True
+        self.useRegrFrom = 3
+        self.useRegrFor = 1
 
 
 

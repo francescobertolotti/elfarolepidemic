@@ -17,10 +17,24 @@ class Person:
 
         # OUTPUT
         self.SIR_infectionsCounter = 0 # how many times an agent got infected
- 
-        
-    def personStrategyOutput(self) -> None: # This function calculates the latest strategy for the agents every week
-        s_output = random.random()
+    
+    
+    def regrLinStrategyMethod(self, par, gv):
+        regr = gv.regLine(self.person_memory)
+        regr_output = regr[len(regr) - 1]
+        return (regr_output * par.useRegrFor) + (self.defaultStrategyMethod() * (1 - par.useRegrFor))
+    
+    def randomStrategyMethod(self):
+        return random.random()
+    
+    def defaultStrategyMethod(self):
+        return self.randomStrategyMethod()
+    
+    def personStrategyOutput(self, par, gv) -> None: # This function calculates the latest strategy for the agents every week
+        if par.useRegr and gv.t >= par.useRegrFrom:
+            s_output = self.regrLinStrategyMethod(par, gv)
+        else:
+            s_output = self.defaultStrategyMethod()
         self.person_memory.append(s_output)
         
     
@@ -65,8 +79,8 @@ class Person:
         else:
             return self.person_memory[0]
     
-    def personCurrentStrategy(self, par) -> float: # This function is a wrapper for personStrategyOutput and memoryMean
-        self.personStrategyOutput()
+    def personCurrentStrategy(self, par, gv) -> float: # This function is a wrapper for personStrategyOutput and memoryMean
+        self.personStrategyOutput(par, gv)
         memoryMeanF = self.memoryMean(par)
         return memoryMeanF
     
@@ -155,7 +169,7 @@ class Person:
             return
 
         else:
-            a_strat = self.personCurrentStrategy(par) # This float rapresent the strategy of agent each week
+            a_strat = self.personCurrentStrategy(par, gv) # This float rapresent the strategy of agent each week
                 
             c_level = 0 # This float rapresent the contagious level of agent each week
             if self.getIfInfected(): # If agent is infected
