@@ -4,10 +4,17 @@ from model.person import *
 def setup(par, gv, al):
 
     # Building agents objects
-    for i in range(par.n_persons): # This generates the agents needed for the simulation
+    contOne = 0
+    contTwo = 0
+    for i in range(1, par.n_persons + 1): # This generates the agents needed for the simulation
         new_person = Person()
-        new_person.who = i + 1
-        if (i + 1) <= par.num_infected_persons: 
+        new_person.who = i
+        
+        if i <= (par.n_persons * par.strategyOne):
+            new_person.strategyType = 1
+        if i > (par.n_persons * (1 - par.strategyTwo)):
+            new_person.strategyType = 2
+        if (i) <= par.num_infected_persons: 
             new_person.initiateContagius(par, gv)
         al.persons_list.append(new_person)
 

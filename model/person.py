@@ -6,7 +6,8 @@ class Person:
     def __init__(self):
 
         # PARAMETERS
-        self.who = None #number of the agent
+        self.who = None # Number of the agent
+        self.strategyType = 0 # Number of strategy to follow
 
         # STATES
         self.person_memory = [] # array to save memory of attendance
@@ -17,6 +18,7 @@ class Person:
 
         # OUTPUT
         self.SIR_infectionsCounter = 0 # how many times an agent got infected
+
     
     
     def regrLinStrategyMethod(self, par, gv):
@@ -30,7 +32,12 @@ class Person:
     def defaultStrategyMethod(self):
         return self.randomStrategyMethod()
     
-    def personStrategyOutput(self, par, gv) -> None: # This function calculates the latest strategy for the agents every week
+    def personStrategyOutputOne(self) -> None: # This function calculates the latest strategy for the agents every week
+        s_output = self.defaultStrategyMethod()
+        self.person_memory.append(s_output)
+        
+    
+    def personStrategyOutputTwo(self, par, gv) -> None: # This function calculates the latest strategy for the agents every week
         if par.useRegr and gv.t >= par.useRegrFrom:
             s_output = self.regrLinStrategyMethod(par, gv)
         else:
@@ -80,7 +87,10 @@ class Person:
             return self.person_memory[0]
     
     def personCurrentStrategy(self, par, gv) -> float: # This function is a wrapper for personStrategyOutput and memoryMean
-        self.personStrategyOutput(par, gv)
+        if self.strategyType == 1:
+            self.personStrategyOutputOne()
+        if self.strategyType == 2:
+            self.personStrategyOutputTwo(par, gv)
         memoryMeanF = self.memoryMean(par)
         return memoryMeanF
     
