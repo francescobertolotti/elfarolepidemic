@@ -14,6 +14,7 @@ class glob_vars:
         self.n_new_infected = 0 # SCRIVERE
         self.contagious_level_sum = 0 # SCRIVERE
         self.n_infected_agents = 0 # SCRIVERE
+        self.capacityHistory = []
 
         # Statistics
         self.attendance_history = [] # This array is composed from a series of integers rapresenting the number of people in the bar

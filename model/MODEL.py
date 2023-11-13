@@ -2,7 +2,6 @@
 
 # COSE DA GGIUNGERE
 # 0) testare altre strategie decisionali per gli agenti
-# 1) metrica per contare quante volte un agente va al bar
 
 
 from model.parameters import *
@@ -12,6 +11,7 @@ from model.setup import *
 from model.go import *
 from model.conclusion import *
 import numpy as np
+from model.policy_maker import *
 
 class model():
     def __init__(self, my_seed):
@@ -20,6 +20,7 @@ class model():
         np.random.seed(seed=my_seed)
 
         self.al = agents_list()
+        self.pm = PM()
         self.par = parameters()
         self.gv = glob_vars(self.par)
 
@@ -29,7 +30,7 @@ class model():
         random.seed(my_seed)
         setup(self.par, self.gv, self.al)
 
-        for _ in range(self.par.max_week): go(self.par, self.gv, self.al)
+        for _ in range(self.par.max_week): go(self.par, self.gv, self.al, self.pm)
 
         conclusions().Chart(par=self.par, gv=self.gv)
 

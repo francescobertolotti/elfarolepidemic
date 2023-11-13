@@ -31,5 +31,12 @@ class parameters:
         self.useRegrFor = 1
 
 
+
+        # PM parameters
+        self.enablePM = True
+        self.a1_reductionPerc = 0.2
+        self.a1_reductionDuration = 3
+        self.a1_InfectedTreshold = 1
+
         
         

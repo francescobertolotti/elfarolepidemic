@@ -1,7 +1,7 @@
 # import libraries
-from model.person import *
 
-def go(par, gv, al):
+
+def go(par, gv, al, pm):
 
     # 1 - initialize global variables
     gv.initialize_gv()
@@ -21,7 +21,10 @@ def go(par, gv, al):
     
     gv.t += 1
 
+    gv.capacityHistory.append(par.capacity)
+    if par.enablePM:
+        pm.operationForWeek(par, gv)
 
-
+    
 
 
