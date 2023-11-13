@@ -5,7 +5,7 @@ class glob_vars:
     
     def __init__(self, par):
         
-        # GLOBAL VARIABLES
+        # Global Variables
         self.t = 0 #time step of the simulation
         self.attendance = 0  # This integer rapresent the n of the agents going to the bar each time step
         self.present_agents = [] # This is the array containing al the agents that will be in the bar each week
@@ -15,7 +15,7 @@ class glob_vars:
         self.contagious_level_sum = 0 # SCRIVERE
         self.n_infected_agents = 0 # SCRIVERE
 
-        # STATISTICS
+        # Statistics
         self.attendance_history = [] # This array is composed from a series of integers rapresenting the number of people in the bar
         self.contagious_history = [] # This array is composed from a series of integers rapresenting the number of contagious people
         self.present_contagious_history = [] # This array is composed from a series of integers rapresenting the number of contagious people in the bar

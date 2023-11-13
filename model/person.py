@@ -5,19 +5,20 @@ import numpy as np
 class Person:
     def __init__(self):
 
-        # PARAMETERS
+        # Parameters
         self.who = None # Number of the agent
         self.strategyType = 0 # Number of strategy to follow
 
-        # STATES
+        # States
         self.person_memory = [] # array to save memory of attendance
         self.levelContagious = 0 # rappresent the contagious threshold
         self.ContagiousWillStopAt = 0 # rappresent the remaning time for how much this agent remains contagious
         self.infectionStartingWeek = 0 # Rappresent the week when the infection has started   
-        self.SIRWillStopAt = -1 # as ContagiousWillStopAt but 
+        self.infectionResistanceWillStopAt = -1 # As ContagiousWillStopAt but 
 
-        # OUTPUT
-        self.SIR_infectionsCounter = 0 # how many times an agent got infected
+        # Output
+        self.INFECTIONS_infectionsCounter = 0 # How many times an agent got infected
+        self.BAR_presenceCounter = 0 # How many times an agent got present in the bar
 
     
     
@@ -108,10 +109,10 @@ class Person:
         infectionStartingWeek = gv.t
         if par.infection_generatesResistance:
             if par.infection_cantStartUntil != 0:
-                if infectionStartingWeek >= self.SIRWillStopAt:
+                if infectionStartingWeek >= self.infectionResistanceWillStopAt:
                     infectAgentDecisionSIR = True
             else:
-                if self.SIR_infectionsCounter == 0:
+                if self.INFECTIONS_infectionsCounter == 0:
                     infectAgentDecisionSIR = True
         else:
             infectAgentDecisionSIR = True
@@ -126,11 +127,11 @@ class Person:
 
             self.infectionStartingWeek = infectionStartingWeek # This indicate the number of the week in which the agent is infected
             
-            self.SIR_infectionsCounter += 1 # Counts how many time the agent gets infected
+            self.INFECTIONS_infectionsCounter += 1 # Counts how many time the agent gets infected
 
             if par.infection_generatesResistance:
                 if par.infection_cantStartUntil != 0:
-                    self.SIRWillStopAt = par.infection_cantStartUntil + self.ContagiousWillStopAt + 1
+                    self.infectionResistanceWillStopAt = par.infection_cantStartUntil + self.ContagiousWillStopAt + 1
             return True
         else:
             return False
@@ -160,7 +161,7 @@ class Person:
             self.levelContagious = 0
             self.ContagiousWillStopAt = 0
             self.infectionStartingWeek = 0
-            self.SIRWillStopAt = self.infection_cantStartUntil + current_week
+            self.infectionResistanceWillStopAt = self.infection_cantStartUntil + current_week
             
             return 0
         
@@ -187,6 +188,7 @@ class Person:
 
             if a_strat < par.threshold and c_level <= par.infection_thresholdNotPresent: # If the agent strategy for this week and contagious level is below the not present threshold, he will be in the bare.
                 gv.attendance += 1
+                self.BAR_presenceCounter += 1
                 gv.present_agents.append(self)
 
 
