@@ -14,7 +14,7 @@ class parameters:
 
         # Epidemic parameters
         self.num_infected_persons = 2 # Identifies the number of starting contagious people
-        self.infection_cantStartUntil = 10 # how long a person is resistent to infection
+        self.infection_cantStartUntil = 2 # how long a person is resistent to infection
         self.infection_generatesResistance = True # is the agent susceptible to infection?
         self.infection_threshold = 0.5 # Another person gets contagious if his contagious level is greather than contagious_threshold
         self.infection_thresholdNotPresent = 0.7 # the level beyond which an agent is not going to the bar
@@ -33,7 +33,7 @@ class parameters:
 
 
         # PM parameters
-        self.enablePM = True
+        self.enablePM = False
         self.a1_reductionPerc = 0.2
         self.a1_reductionDuration = 3
         self.a1_InfectedTreshold = 1
