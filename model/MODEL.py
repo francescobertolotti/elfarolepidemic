@@ -20,9 +20,9 @@ class model():
         np.random.seed(seed=my_seed)
 
         self.al = agents_list()
-        self.pm = PM()
         self.par = parameters()
         self.gv = glob_vars(self.par)
+        self.pm = PM(self.par)
 
     def run(self, my_seed):
         

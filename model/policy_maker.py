@@ -2,14 +2,14 @@
 
 class PM:
 
-    def __init__(self) -> None:
+    def __init__(self, par) -> None:
         
         # Parameters
         self.operationsArr = ["a1InitCheck"]
         
         # States
         self.a1OldCapacity = 0
-        self.a1StartingWeekReduction = 0
+        self.a1StartingWeekReduction = par.a1_reductionDuration
 
         # Output
         self.PM_interactionCounter = 0 # Indentifies a conunter that indicates the number of times the PM interacts with the system
