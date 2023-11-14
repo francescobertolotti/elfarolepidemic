@@ -4,7 +4,7 @@ class parameters:
     def __init__(self):
 
         # Simulation parameters
-        self.max_week = 90
+        self.max_week = 100
         self.n_persons = 100
 
         # Social parameters
@@ -26,7 +26,7 @@ class parameters:
         self.strategyTwo = 1 - self.strategyOne # StrategyOne: Partialy with linearRegression
 
         # Agent strategyTwo parameters
-        self.useRegr = True
+        self.useRegr = True # da togliere
         self.useRegrFrom = 3
         self.useRegrFor = 1
 
