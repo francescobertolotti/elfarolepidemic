@@ -2,6 +2,8 @@
 
 
 def go(par, gv, al, pm):
+    
+    gv.t += 1
 
     # 1 - initialize global variables
     gv.initialize_gv()
@@ -19,12 +21,11 @@ def go(par, gv, al, pm):
     # 5 - Update output
     gv.compute_globals(al, par)
     
-    gv.t += 1
+    
 
     gv.capacityHistory.append(par.capacity)
     if par.enablePM:
         pm.operationForWeek(par, gv)
 
-    
 
 
