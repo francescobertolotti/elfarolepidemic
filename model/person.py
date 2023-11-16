@@ -4,7 +4,7 @@ import numpy as np
 import math
 
 class Person:
-    def __init__(self):
+    def __init__(self, par):
 
         # Parameters
         self.who = None # Number of the agent
@@ -16,10 +16,12 @@ class Person:
         self.ContagiousWillStopAt = 0 # rappresent the remaning time for how much this agent remains contagious
         self.infectionStartingWeek = 0 # Rappresent the week when the infection has started   
         self.infectionResistanceWillStopAt = -1 # As ContagiousWillStopAt but 
+        self.infectionLevelsArr = self.getContagiousArr(par)
 
         # Output
         self.INFECTIONS_infectionsCounter = 0 # How many times an agent got infected
         self.BAR_presenceCounter = 0 # How many times an agent got present in the bar
+
 
     
     
@@ -123,8 +125,7 @@ class Person:
                 
         if infectAgentDecisionSIR:
             self.levelContagious = 1  # This rapresent the initial contagious level
-            self.timeContagious = contagiousTime # This rapresent for how much time the agent will remain infected
-            self.ContagiousWillStopAt = self.timeContagious + infectionStartingWeek # This rapresent the remaining time for the agent to remain infected, the first day this is equal to self.timeContagious
+            self.ContagiousWillStopAt = par.infection_duration + infectionStartingWeek # This rapresent the remaining time for the agent to remain infected, the first day this is equal to self.timeContagious
 
             self.infectionStartingWeek = infectionStartingWeek # This indicate the number of the week in which the agent is infected
             
@@ -137,24 +138,32 @@ class Person:
         else:
             return False
 
+    def getContagiousArr(self, par):
+        x, x_max = 0.1, 1
+        x_ts = [x]
+        t_max = par.infection_duration
+        c, d = 0.5, 0.4
 
-    def getContagiousLevel(self, current_week: int = -1): # This functions calculates the level of contagious for the agents every week
+        for t in range(1, t_max + 1): 
+            x = x + c * (1 - x / x_max) 
+            x = x * ( 1 - t / t_max ) 
+            x_ts.append(x)
+        
+        x_ts = np.array(x_ts)
+        x_ts_toOne = x_ts * (1 + (1 - max(x_ts)))
+        return x_ts_toOne
+
+    def getContagiousLevel(self, par, gv, current_week: int = -1): # This functions calculates the level of contagious for the agents every week
         if current_week == -1:
             raise Exception('Contagious level error')
         
         
         if self.ContagiousWillStopAt - current_week >= 0:
 
-            x, x_max = 0.1, 1
-            x_ts = [x]
-            t_max = self.timeContagious
-            c, d = 0.5, 0.4
-
             t = (current_week - self.infectionStartingWeek)
-            
-            x = x + c * (1 - x / x_max) 
-            x = x * ( 1 - t / t_max )
-            
+
+            # if self.who == 1: print(self.infectionLevelsArr[t - 1], gv.t)
+            x = self.infectionLevelsArr[t - 1]
             self.levelContagious = x
 
             return x
@@ -163,7 +172,7 @@ class Person:
             self.levelContagious = 0
             self.ContagiousWillStopAt = 0
             self.infectionStartingWeek = 0
-            self.infectionResistanceWillStopAt = self.infection_cantStartUntil + current_week
+            self.infectionResistanceWillStopAt = par.infection_cantStartUntil + current_week
             
             return 0
         
@@ -186,8 +195,8 @@ class Person:
                 
             c_level = 0 # This float rapresent the contagious level of agent each week
             if self.getIfInfected(): # If agent is infected
-                c_level = self.getContagiousLevel(current_week=gv.t) # Calculate contagious level
-            
+                c_level = self.getContagiousLevel(par, gv, current_week=gv.t) # Calculate contagious level
+                
                 #if gv.t == 18: print(c_level, gv.t, self.who, self.ContagiousWillStopAt, self.infectionStartingWeek)
                 #if self.who == 1: print(c_level, gv.t, self.who, self.ContagiousWillStopAt, self.infectionStartingWeek)
             if a_strat < par.threshold and c_level <= par.infection_thresholdNotPresent: # If the agent strategy for this week and contagious level is below the not present threshold, he will be in the bare.

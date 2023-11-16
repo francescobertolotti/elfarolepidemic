@@ -1,5 +1,5 @@
 # import libraries
-
+import random
 
 def go(par, gv, al, pm):
     
@@ -14,6 +14,10 @@ def go(par, gv, al, pm):
     # 3 - Updating strategy of the present agents
     gv.update_present_agents_strategy(par)
     for person in gv.present_agents: person.updateLastStrategy(gv)
+    
+
+    random.shuffle(gv.present_agents)
+
 
     # 4 - Agents get infected
     person.infection_dynamics(gv, par, al)

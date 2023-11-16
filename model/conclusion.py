@@ -16,7 +16,7 @@ class conclusions:
         if par.enablePM: pm_treshold_string = f"\nPM a1 treshold: {par.a1_InfectedTreshold}"
         else: pm_treshold_string = ""
         if max_line:
-            plt.plot(arr_x, gv.capacityHistory, color="red", label=f"Maximum capacity: {par.capacity}{pm_treshold_string}")
+            plt.plot(arr_x, gv.capacityHistory, color="red", label=f"Final maximum capacity: {par.capacity}{pm_treshold_string}")
         plt.legend(loc="upper left", bbox_to_anchor=(0.175, -0.1), ncol=1)
         plt.tight_layout()
         plt.show()

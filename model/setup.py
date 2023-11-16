@@ -4,10 +4,8 @@ from model.person import *
 def setup(par, gv, al):
 
     # Building agents objects
-    contOne = 0
-    contTwo = 0
     for i in range(1, par.n_persons + 1): # This generates the agents needed for the simulation
-        new_person = Person()
+        new_person = Person(par)
         new_person.who = i
         
         if i <= (par.n_persons * par.strategyOne):
