@@ -150,8 +150,9 @@ class Person:
             x_ts.append(x)
         
         x_ts = np.array(x_ts)
+        
         x_ts_toOne = x_ts * (1 + ((1 - max(x_ts))/max(x_ts)))
-
+        
         return x_ts_toOne
 
     def getContagiousLevel(self, par, gv, current_week: int = -1): # This functions calculates the level of contagious for the agents every week
