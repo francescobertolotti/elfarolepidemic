@@ -8,7 +8,7 @@ class parameters:
         self.n_persons = 100
 
         # Social parameters
-        self.capacity = 50 # This integer represent the maximum capacity of the bar (is userfull if respect_the_max: bool = True)
+        self.capacity = 35 # This integer represent the maximum capacity of the bar (is userfull if respect_the_max: bool = True)
         self.threshold = 0.5 # This threshold is used to determine if an agent will go to the bar or not depending on his strategy
         self.respect_the_max = True # This boolean rapresent if the bar capacity will be respected or not
 
@@ -34,9 +34,9 @@ class parameters:
 
         # PM parameters
         self.enablePM = True
-        self.a1_reductionPerc = 0.3
+        self.a1_reductionPerc = 0.6
         self.a1_reductionDuration = 3
-        self.a1_InfectedTreshold = 50
+        self.a1_InfectedTreshold = 30
 
         
         

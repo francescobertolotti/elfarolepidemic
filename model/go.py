@@ -5,6 +5,8 @@ def go(par, gv, al, pm):
     
     gv.t += 1
 
+    random.shuffle(gv.present_agents)
+
     # 1 - initialize global variables
     gv.initialize_gv()
 
