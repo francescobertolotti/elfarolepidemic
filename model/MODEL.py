@@ -3,7 +3,7 @@
 # COSE DA GGIUNGERE
 # 0) testare altre strategie decisionali per gli agenti
 
-
+from joblib import Parallel, delayed
 from model.parameters import *
 from model.global_vars import *
 from model.person import *
@@ -30,8 +30,8 @@ class model():
         random.seed(my_seed)
         setup(self.par, self.gv, self.al)
 
-        for _ in range(self.par.max_week): go(self.par, self.gv, self.al, self.pm)
-
+        for _ in range(self.par.max_days): go(self.par, self.gv, self.al, self.pm)
+        #Parallel(n_jobs=-1)(delayed(go)(self.par, self.gv, self.al, self.pm) for _ in range(self.par.max_days))
         conclusions().Chart(par=self.par, gv=self.gv)
 
         return self.gv

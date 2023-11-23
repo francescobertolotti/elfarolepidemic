@@ -8,9 +8,9 @@ class glob_vars:
         # Global Variables
         self.t = 0 #time step of the simulation
         self.attendance = 0  # This integer rapresent the n of the agents going to the bar each time step
-        self.present_agents = [] # This is the array containing al the agents that will be in the bar each week
-        self.infected_attendance = 0 # This integer rapresent the n of the agents which are infected each week
-        self.present_agents_strategy = 0 # This float rapresent the strategy of agent each week
+        self.present_agents = [] # This is the array containing al the agents that will be in the bar each day
+        self.infected_attendance = 0 # This integer rapresent the n of the agents which are infected each day
+        self.present_agents_strategy = 0 # This float rapresent the strategy of agent each day
         self.n_new_infected = 0 # SCRIVERE
         self.contagious_level_sum = 0 # SCRIVERE
         self.n_infected_agents = 0 # SCRIVERE
@@ -32,7 +32,7 @@ class glob_vars:
                 self.infected_attendance += 1
         
         self.attendance = len(self.present_agents)
-        # print('week %d, attendance %d, infected_attendance %d' % (self.t, self.attendance, self.infected_attendance))
+        # print('day %d, attendance %d, infected_attendance %d' % (self.t, self.attendance, self.infected_attendance))
         self.attendance_history.append(self.attendance)
         self.contagious_history.append(self.infected_attendance)
 
@@ -65,8 +65,8 @@ class glob_vars:
     
     def initialize_gv(self):
         self.attendance = 0 # This integer rapresent the n of the agents going to the bar
-        self.present_agents = [] # This is the array containing al the agents that will be in the bar each week
-        self.infected_attendance = 0 # This integer rapresent the n of the agents which are infected each week
+        self.present_agents = [] # This is the array containing al the agents that will be in the bar each day
+        self.infected_attendance = 0 # This integer rapresent the n of the agents which are infected each day
         self.n_new_infected = 0 # SCRIVERE
         self.contagious_level_sum = 0 # SCRIVERE
         self.n_infected_agents = 0 # SCRIVERE

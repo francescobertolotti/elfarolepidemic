@@ -14,7 +14,7 @@ class Person:
         self.person_memory = [] # array to save memory of attendance
         self.levelContagious = 0 # rappresent the contagious threshold
         self.ContagiousWillStopAt = 0 # rappresent the remaning time for how much this agent remains contagious
-        self.infectionStartingWeek = 0 # Rappresent the week when the infection has started   
+        self.infectionStartingDay = 0 # Rappresent the day when the infection has started   
         self.infectionResistanceWillStopAt = -1 # As ContagiousWillStopAt but 
         self.infectionLevelsArr = self.getContagiousArr(par)
 
@@ -36,12 +36,12 @@ class Person:
     def defaultStrategyMethod(self):
         return self.randomStrategyMethod()
     
-    def personStrategyOutputOne(self) -> None: # This function calculates the latest strategy for the agents every week
+    def personStrategyOutputOne(self) -> None: # This function calculates the latest strategy for the agents every day
         s_output = self.defaultStrategyMethod()
         self.person_memory.append(s_output)
         
     
-    def personStrategyOutputTwo(self, par, gv) -> None: # This function calculates the latest strategy for the agents every week
+    def personStrategyOutputTwo(self, par, gv) -> None: # This function calculates the latest strategy for the agents every day
         if par.useRegr and gv.t >= par.useRegrFrom:
             s_output = self.regrLinStrategyMethod(par, gv)
         else:
@@ -49,7 +49,7 @@ class Person:
         self.person_memory.append(s_output)
         
     
-    def memoryMean(self, par) -> float: # This function returns the actual strategy composed by the last strategy and the ol strategies of the past weeks. This is done through a weighed average.
+    def memoryMean(self, par) -> float: # This function returns the actual strategy composed by the last strategy and the ol strategies of the past days. This is done through a weighed average.
 
         if len(self.person_memory) > 1:
             compiled_memory = []
@@ -107,10 +107,10 @@ class Person:
     
     def canAgentBeInfected(self, par, gv):
         infectAgentDecisionSIR = False
-        infectionStartingWeek = gv.t
+        infectionStartingDay = gv.t
         if par.infection_generatesResistance:
             if par.infection_cantStartUntil != 0:
-                if infectionStartingWeek >= self.infectionResistanceWillStopAt:
+                if infectionStartingDay >= self.infectionResistanceWillStopAt:
                     infectAgentDecisionSIR = True
             else:
                 if self.INFECTIONS_infectionsCounter == 0:
@@ -118,7 +118,7 @@ class Person:
         else:
             infectAgentDecisionSIR = True
 
-        if infectionStartingWeek == -1:
+        if infectionStartingDay == -1:
             infectAgentDecisionSIR = True
         
         return infectAgentDecisionSIR
@@ -126,13 +126,13 @@ class Person:
 
     def initiateContagius(self, par, gv) -> bool: # This function is needed to initiate the contagious for the agent (returns a boolean that indicates if the contagious was executed)
         infectAgentDecisionSIR = self.canAgentBeInfected(par, gv)
-        infectionStartingWeek = gv.t
+        infectionStartingDay = gv.t
                 
         if infectAgentDecisionSIR:
             self.levelContagious = 1  # This rapresent the initial contagious level
-            self.ContagiousWillStopAt = par.infection_duration + infectionStartingWeek # This rapresent the remaining time for the agent to remain infected, the first day this is equal to self.timeContagious
+            self.ContagiousWillStopAt = par.infection_duration + infectionStartingDay # This rapresent the remaining time for the agent to remain infected, the first day this is equal to self.timeContagious
 
-            self.infectionStartingWeek = infectionStartingWeek # This indicate the number of the week in which the agent is infected
+            self.infectionStartingDay = infectionStartingDay # This indicate the number of the day in which the agent is infected
             
             self.INFECTIONS_infectionsCounter += 1 # Counts how many time the agent gets infected
 
@@ -160,14 +160,14 @@ class Person:
         
         return x_ts_toOne
 
-    def getContagiousLevel(self, par, gv, current_week: int = -1): # This functions calculates the level of contagious for the agents every week
-        if current_week == -1:
+    def getContagiousLevel(self, par, gv, current_day: int = -1): # This functions calculates the level of contagious for the agents every day
+        if current_day == -1:
             print('Contagious level error')
         
 
-        if self.ContagiousWillStopAt - (current_week - 1) > 0:
+        if self.ContagiousWillStopAt - (current_day - 1) > 0:
 
-            t = (current_week - self.infectionStartingWeek)
+            t = (current_day - self.infectionStartingDay)
 
             # if self.who == 1: print(self.infectionLevelsArr[t - 1], gv.t)
             x = self.infectionLevelsArr[t - 1]
@@ -175,12 +175,12 @@ class Person:
 
             return x
             
-        elif self.ContagiousWillStopAt - (current_week - 1) == 0 and gv.t != 1:
+        elif self.ContagiousWillStopAt - (current_day - 1) == 0 and gv.t != 1:
             
             self.levelContagious = 0
             self.ContagiousWillStopAt = 0
-            self.infectionStartingWeek = 0
-            self.infectionResistanceWillStopAt = par.infection_cantStartUntil + current_week
+            self.infectionStartingDay = 0
+            self.infectionResistanceWillStopAt = par.infection_cantStartUntil + current_day
             
             return 0
         
@@ -199,14 +199,14 @@ class Person:
             return
 
         else:
-            a_strat = self.personCurrentStrategy(par, gv) # This float rapresent the strategy of agent each week
+            a_strat = self.personCurrentStrategy(par, gv) # This float rapresent the strategy of agent each day
                 
-            c_level = 0 # This float rapresent the contagious level of agent each week
+            c_level = 0 # This float rapresent the contagious level of agent each day
             if self.getIfInfected(): # If agent is infected
-                c_level = self.getContagiousLevel(par, gv, current_week=gv.t) # Calculate contagious level
-                #if gv.t == 18: print(c_level, gv.t, self.who, self.ContagiousWillStopAt, self.infectionStartingWeek)
-                #if self.who == 1: print(c_level, gv.t, self.who, self.ContagiousWillStopAt, self.infectionStartingWeek)
-            if a_strat < par.threshold and c_level <= par.infection_thresholdNotPresent: # If the agent strategy for this week and contagious level is below the not present threshold, he will be in the bare.
+                c_level = self.getContagiousLevel(par, gv, current_day=gv.t) # Calculate contagious level
+                #if gv.t == 18: print(c_level, gv.t, self.who, self.ContagiousWillStopAt, self.infectionStartingDay)
+                #if self.who == 1: print(c_level, gv.t, self.who, self.ContagiousWillStopAt, self.infectionStartingDay)
+            if a_strat < par.threshold and c_level <= par.infection_thresholdNotPresent: # If the agent strategy for this day and contagious level is below the not present threshold, he will be in the bare.
                 gv.attendance += 1
                 self.BAR_presenceCounter += 1
                 gv.present_agents.append(self)
@@ -226,13 +226,13 @@ class Person:
         
         gv.present_contagious_history.append(gv.n_infected_agents)
 
-        n_susceptible_agents = len(gv.present_agents) - gv.n_infected_agents # This is the n of agents that could be infected this week
+        n_susceptible_agents = len(gv.present_agents) - gv.n_infected_agents # This is the n of agents that could be infected this day
         
         try:
-            #n_new_infected = int(math.ceil(gv.contagious_level_sum * n_susceptible_agents / (n_susceptible_agents + gv.n_infected_agents))) # This is the n of agents that will be infected this week
-            n_new_infected = int(0.5 + par.alpha * gv.contagious_level_sum * n_susceptible_agents / (par.capacity)) # This is the n of agents that will be infected this week
+            #n_new_infected = int(math.ceil(gv.contagious_level_sum * n_susceptible_agents / (n_susceptible_agents + gv.n_infected_agents))) # This is the n of agents that will be infected this day
+            n_new_infected = int(0.5 + par.alpha * gv.contagious_level_sum * n_susceptible_agents / (par.capacity)) # This is the n of agents that will be infected this day
         except:
-            print('Error week %d, divison0 %.2f' % (gv.t, (par.capacity)))
+            print('Error day %d, divison0 %.2f' % (gv.t, (par.capacity)))
             n_new_infected = 0
         
         '''

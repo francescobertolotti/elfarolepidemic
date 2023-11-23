@@ -4,7 +4,7 @@ class parameters:
     def __init__(self):
 
         # Simulation parameters
-        self.max_week = 100
+        self.max_days = 100
         self.n_persons = 2000
 
         # Social parameters
@@ -18,7 +18,7 @@ class parameters:
         self.infection_generatesResistance = True # is the agent susceptible to infection?
         self.infection_threshold = 0.4 # Another person gets contagious if his contagious level is greather than contagious_threshold
         self.infection_thresholdNotPresent = 0.8 # the level beyond which an agent is not going to the bar
-        self.infection_duration = 10 # An agent is contagious for infection_duration weeks
+        self.infection_duration = 10 # An agent is contagious for infection_duration day
         self.people_memory_weight_arr = [0.5, 0.2, 0.1] # This is the weight agents give to each single event
         self.alpha = 0.1 # This is the weight to the new infected agents
 

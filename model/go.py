@@ -1,9 +1,11 @@
 # import libraries
 import random
+from joblib import Parallel, delayed
 
 def go(par, gv, al, pm):
     
     gv.t += 1
+
 
     random.shuffle(gv.present_agents)
 
@@ -16,6 +18,7 @@ def go(par, gv, al, pm):
     for person in al.persons_list: person.getContagiousLevel(par, gv, gv.t)
     for person in al.persons_list: person.decisionAttendingBar(gv, par) 
 
+    
     # 3 - Updating strategy of the present agents
     gv.update_present_agents_strategy(par)
     for person in gv.present_agents: person.updateLastStrategy(gv)
@@ -34,7 +37,7 @@ def go(par, gv, al, pm):
 
     gv.capacityHistory.append(gv.actualCapacity)
     if par.enablePM:
-        pm.operationForWeek(par, gv)
+        pm.operationForDay(par, gv)
 
 
 
