@@ -14,22 +14,17 @@ class glob_vars:
         self.n_new_infected = 0 # SCRIVERE
         self.contagious_level_sum = 0 # SCRIVERE
         self.n_infected_agents = 0 # SCRIVERE
-        self.capacityHistory = []
+        self.actualCapacity = par.capacity
 
         # Statistics
         self.attendance_history = [] # This array is composed from a series of integers rapresenting the number of people in the bar
         self.contagious_history = [] # This array is composed from a series of integers rapresenting the number of contagious people
         self.present_contagious_history = [] # This array is composed from a series of integers rapresenting the number of contagious people in the bar
-
+        self.capacityHistory = []
+        self.new_infected_history = []
 
     def compute_globals(self, al, par):
 
-        n_infected_agents = 0                
-        for present_agent in self.present_agents: # Updating n_infected_agents
-            if present_agent.getIfInfected():
-                n_infected_agents += 1
-
-        self.present_contagious_history.append(n_infected_agents)
         # Calculating n of infected agents
 
         for agent in al.persons_list: 

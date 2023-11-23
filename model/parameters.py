@@ -16,11 +16,11 @@ class parameters:
         self.num_infected_persons = 100 # Identifies the number of starting contagious people
         self.infection_cantStartUntil = 2 # how long a person is resistent to infection
         self.infection_generatesResistance = True # is the agent susceptible to infection?
-        self.infection_threshold = 0.6 # Another person gets contagious if his contagious level is greather than contagious_threshold
+        self.infection_threshold = 0.4 # Another person gets contagious if his contagious level is greather than contagious_threshold
         self.infection_thresholdNotPresent = 0.8 # the level beyond which an agent is not going to the bar
         self.infection_duration = 10 # An agent is contagious for infection_duration weeks
         self.people_memory_weight_arr = [0.5, 0.2, 0.1] # This is the weight agents give to each single event
-        self.alpha = 1 # This is the weight to the new infected agents
+        self.alpha = 0.1 # This is the weight to the new infected agents
 
         # Agent strategies
         self.strategyOne = 0.5 # StrategyOne: Random strategy
@@ -35,9 +35,9 @@ class parameters:
 
         # PM parameters
         self.enablePM = True
-        self.a1_reductionPerc = 0.9
-        self.a1_reductionDuration = 3
-        self.a1_InfectedTreshold = 200
+        self.a1_reductionPerc = 0.8
+        self.a1_reductionDuration = 10
+        self.a1_InfectedTreshold = 750
 
         
         

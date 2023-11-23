@@ -10,7 +10,10 @@ def go(par, gv, al, pm):
     # 1 - initialize global variables
     gv.initialize_gv()
 
+
+
     # 2 - calculating how many agents are going to the bar
+    for person in al.persons_list: person.getContagiousLevel(par, gv, gv.t)
     for person in al.persons_list: person.decisionAttendingBar(gv, par) 
 
     # 3 - Updating strategy of the present agents
@@ -20,16 +23,16 @@ def go(par, gv, al, pm):
 
     random.shuffle(gv.present_agents)
 
+    # 4 - Update output
+    gv.compute_globals(al, par)
 
-    # 4 - Agents get infected
+    # 5 - Agents get infected
     person.infection_dynamics(gv, par, al)
 
-    # 5 - Update output
-    gv.compute_globals(al, par)
     
     
 
-    gv.capacityHistory.append(par.capacity)
+    gv.capacityHistory.append(gv.actualCapacity)
     if par.enablePM:
         pm.operationForWeek(par, gv)
 

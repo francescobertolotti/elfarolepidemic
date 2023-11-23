@@ -105,10 +105,8 @@ class Person:
             print('Error memory arr day:%d agent:%d memory:%s' % (gv.t, self.who, self.person_memory))
         self.person_memory.append(gv.present_agents_strategy)
     
-    #par, gv
-    def initiateContagius(self, par, gv) -> bool: # This function is needed to initiate the contagious for the agent (returns a boolean that indicates if the contagious was executed)
+    def canAgentBeInfected(self, par, gv):
         infectAgentDecisionSIR = False
-        contagiousTime = par.infection_duration
         infectionStartingWeek = gv.t
         if par.infection_generatesResistance:
             if par.infection_cantStartUntil != 0:
@@ -122,6 +120,13 @@ class Person:
 
         if infectionStartingWeek == -1:
             infectAgentDecisionSIR = True
+        
+        return infectAgentDecisionSIR
+
+
+    def initiateContagius(self, par, gv) -> bool: # This function is needed to initiate the contagious for the agent (returns a boolean that indicates if the contagious was executed)
+        infectAgentDecisionSIR = self.canAgentBeInfected(par, gv)
+        infectionStartingWeek = gv.t
                 
         if infectAgentDecisionSIR:
             self.levelContagious = 1  # This rapresent the initial contagious level
@@ -157,10 +162,10 @@ class Person:
 
     def getContagiousLevel(self, par, gv, current_week: int = -1): # This functions calculates the level of contagious for the agents every week
         if current_week == -1:
-            raise Exception('Contagious level error')
+            print('Contagious level error')
         
-        
-        if self.ContagiousWillStopAt - current_week >= 0:
+
+        if self.ContagiousWillStopAt - (current_week - 1) > 0:
 
             t = (current_week - self.infectionStartingWeek)
 
@@ -170,7 +175,8 @@ class Person:
 
             return x
             
-        else:
+        elif self.ContagiousWillStopAt - (current_week - 1) == 0 and gv.t != 1:
+            
             self.levelContagious = 0
             self.ContagiousWillStopAt = 0
             self.infectionStartingWeek = 0
@@ -189,7 +195,7 @@ class Person:
     def decisionAttendingBar(self, gv, par):
         
         # if the attenance is already above the bar capacity and it is taken into consideration by agents, do not try to attend
-        if gv.attendance >= par.capacity and par.respect_the_max:
+        if gv.attendance >= gv.actualCapacity and par.respect_the_max:
             return
 
         else:
@@ -198,7 +204,6 @@ class Person:
             c_level = 0 # This float rapresent the contagious level of agent each week
             if self.getIfInfected(): # If agent is infected
                 c_level = self.getContagiousLevel(par, gv, current_week=gv.t) # Calculate contagious level
-                
                 #if gv.t == 18: print(c_level, gv.t, self.who, self.ContagiousWillStopAt, self.infectionStartingWeek)
                 #if self.who == 1: print(c_level, gv.t, self.who, self.ContagiousWillStopAt, self.infectionStartingWeek)
             if a_strat < par.threshold and c_level <= par.infection_thresholdNotPresent: # If the agent strategy for this week and contagious level is below the not present threshold, he will be in the bare.
@@ -218,21 +223,69 @@ class Person:
         for present_agent in gv.present_agents: # This will calculate n_infected_agents
             if present_agent.getIfInfected():
                 gv.n_infected_agents += 1
-            
+        
+        gv.present_contagious_history.append(gv.n_infected_agents)
+
         n_susceptible_agents = len(gv.present_agents) - gv.n_infected_agents # This is the n of agents that could be infected this week
         
         try:
             #n_new_infected = int(math.ceil(gv.contagious_level_sum * n_susceptible_agents / (n_susceptible_agents + gv.n_infected_agents))) # This is the n of agents that will be infected this week
-            n_new_infected = int(0.5 + par.alpha * gv.contagious_level_sum * n_susceptible_agents / (n_susceptible_agents + gv.n_infected_agents)) # This is the n of agents that will be infected this week
+            n_new_infected = int(0.5 + par.alpha * gv.contagious_level_sum * n_susceptible_agents / (par.capacity)) # This is the n of agents that will be infected this week
         except:
-            #print('Error week %d, divison0 %.2f' % (week, (n_susceptible_agents + n_infected_agents)))
+            print('Error week %d, divison0 %.2f' % (gv.t, (par.capacity)))
             n_new_infected = 0
         
+        '''
+        cont = 0
         present_agents_susceptible = [ag for ag in gv.present_agents if not ag.getIfInfected()] # This is a list of agents that could be infected
+        present_agents_infected = [ag for ag in gv.present_agents if ag.getIfInfected()] # This is a list of agents that are infected
         new_infected = random.sample(present_agents_susceptible, n_new_infected) # This is a list of agents that will be infected
         for agent in new_infected: # This will infect the agents
             agent.initiateContagius(par, gv) 
+            cont += 1
+        '''
 
+        present_agents_susceptible = [ag for ag in gv.present_agents if not ag.getIfInfected()] # This is a list of agents that could be infected
+        present_agents_infected = [ag for ag in gv.present_agents if ag.getIfInfected()] # This is a list of agents that are infected
+        present_agents_susceptible_infectable = [ag for ag in gv.present_agents if ag.canAgentBeInfected(par, gv) and not ag.getIfInfected()] # This is a list of agents that could be infected
+        cont = 0
+
+
+        for infected_agent in present_agents_infected:
+            if infected_agent.levelContagious >= par.infection_threshold and infected_agent.levelContagious <= par.infection_thresholdNotPresent:
+                for i in range(n_new_infected):
+                    if len(present_agents_susceptible_infectable) > 0:
+                        ag_to_infect = random.choice(present_agents_susceptible_infectable)
+                        present_agents_susceptible_infectable.remove(ag_to_infect)
+                        ag_to_infect.initiateContagius(par, gv)
+                        cont += 1
+                    else:
+                        break
+
+        '''
+        cont = 0
+        cont_a = 0
+        present_agents_infected = [ag for ag in gv.present_agents if ag.getIfInfected()] # This is a list of agents that could be infected
+        for p_i_a in present_agents_infected:
+            if p_i_a.levelContagious >= par.infection_threshold and p_i_a.levelContagious <= par.infection_thresholdNotPresent:
+                present_agents_susceptible = [ag for ag in gv.present_agents if not ag.getIfInfected()] # This is a list of agents that could be infected
+                n_new_infected_per_agent = n_new_infected
+                if n_new_infected_per_agent >= len(present_agents_susceptible): n_new_infected_per_agent = (len(present_agents_susceptible) - 1)
+                new_infected = random.sample(present_agents_susceptible, len(present_agents_susceptible))
+                cont_a = 0
+                while n_new_infected_per_agent > 0:
+                    print(cont_a, n_new_infected_per_agent, len(present_agents_susceptible), n_new_infected, len(new_infected), new_infected)
+                    new_infected_by_a = new_infected[cont_a]
+                    
+                    cont_a += 1
+                    if not new_infected_by_a.getIfInfected():
+                        contagious_execution = new_infected_by_a.initiateContagius(par, gv)
+                        if contagious_execution:
+                            cont += 1
+                            n_new_infected_per_agent -= 1
+        
+        '''
+        gv.new_infected_history.append(cont)
         # cont_debug = 0
         # totInfectedWeekByAgent = 0 # This is a counter for people infected this week by each agent
         # for present_infectious_agent in gv.present_agents: # For each infectous agents between the present agents
