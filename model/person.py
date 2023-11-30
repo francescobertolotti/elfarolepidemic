@@ -210,9 +210,15 @@ class Person:
                 #if gv.t == 18: print(c_level, gv.t, self.who, self.ContagiousWillStopAt, self.infectionStartingDay)
                 #if self.who == 1: print(c_level, gv.t, self.who, self.ContagiousWillStopAt, self.infectionStartingDay)
             if a_strat < par.threshold and c_level <= par.infection_thresholdNotPresent: # If the agent strategy for this day and contagious level is below the not present threshold, he will be in the bare.
-                gv.attendance += 1
-                self.BAR_presenceCounter += 1
-                gv.present_agents.append(self)
+                presence_bool = True
+                if par.enablePM and par.enableA3 and gv.a3_is_active:
+                    if c_level > par.a3_testFailUnder:
+                        presence_bool = False
+
+                if presence_bool:
+                    gv.attendance += 1
+                    self.BAR_presenceCounter += 1
+                    gv.present_agents.append(self)
 
 
 

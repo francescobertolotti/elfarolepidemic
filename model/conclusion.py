@@ -19,7 +19,9 @@ class conclusions:
         if max_line:
             plt.plot(arr_x, gv.capacityHistory, label=f"Final maximum capacity: {int(gv.actualCapacity)}{pm_treshold_string}", color="#e64d10")
         if par.enablePM and par.enableA2: 
-            plt.scatter(gv.a2History_x, gv.a2History_y, s=10, label="Active PM a2 strategy", color="#ad10e6")
+            plt.scatter(gv.a2History_x, gv.a2History_y, s=10, label="Active PM a2 strategy (face masks)", color="#ad10e6")
+        if par.enablePM and par.enableA3: 
+            plt.scatter(gv.a3History_x, gv.a3History_y, s=10, label="Active PM a3 strategy (entrance test)", color="#bc6fd9")
         plt.plot(arr_x, gv.attendance_history, label=f"People in the bar every day\nAgents treshold: {par.threshold}", color="#09a9e3")
         plt.legend(loc="upper left", bbox_to_anchor=(0.175, -0.1), ncol=1)
         plt.tight_layout()

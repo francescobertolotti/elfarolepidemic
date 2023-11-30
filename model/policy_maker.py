@@ -19,6 +19,8 @@ class PM:
 
         self.a2StartingDayReduction = par.a2_reductionDuration
 
+        self.a3StartingDayReduction = par.a2_reductionDuration
+
         # Output
         self.PM_interactionCounter = 0 # Indentifies a conunter that indicates the number of times the PM interacts with the system
 
@@ -48,13 +50,31 @@ class PM:
     
     def a2Init_faceMaskEnd(self, par, gv):
         gv.a2History_x.append(gv.t)
-        gv.a2History_y.append(-5)
+        gv.a2History_y.append(- (par.n_persons * 0.05))
         if gv.t > (self.a2StartingDayReduction + par.a2_reductionDuration):
             self.a2StartingDayReduction = gv.t
             if gv.infected_attendance < (par.a2_InfectedTreshold * par.n_persons):
                 self.operationsArr.remove("a2EndCheck")
                 self.operationsArr.append("a2InitCheck")
                 gv.a2_is_active = False
+
+    def a3Init_entranceTestInit(self, par, gv):
+        if gv.infected_attendance >= (par.a3_InfectedTreshold * par.n_persons):
+            self.a3StartingDayReduction = gv.t
+            self.operationsArr.remove("a3InitCheck")
+            self.operationsArr.append("a3EndCheck")
+            gv.a3_is_active = True
+    
+    def a3Init_entranceTestEnd(self, par, gv):
+        gv.a3History_x.append(gv.t)
+        gv.a3History_y.append(- (par.n_persons * 0.1))
+        if gv.t > (self.a3StartingDayReduction + par.a3_reductionDuration):
+            self.a3StartingDayReduction = gv.t
+            if gv.infected_attendance < (par.a3_InfectedTreshold * par.n_persons):
+                self.operationsArr.remove("a3EndCheck")
+                self.operationsArr.append("a3InitCheck")
+                gv.a3_is_active = False
+
 
     def operationForDay(self, par, gv):
         if "a1InitCheck" in self.operationsArr:
@@ -65,3 +85,7 @@ class PM:
             self.a2Init_faceMaskInit(par, gv)
         if "a2EndCheck" in self.operationsArr:
             self.a2Init_faceMaskEnd(par, gv)
+        if "a3InitCheck" in self.operationsArr:
+            self.a3Init_entranceTestInit(par, gv)
+        if "a3EndCheck" in self.operationsArr:
+            self.a3Init_entranceTestEnd(par, gv)

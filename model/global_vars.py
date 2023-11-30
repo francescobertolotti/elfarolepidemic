@@ -30,6 +30,9 @@ class glob_vars:
         self.a2History_x = []
         self.a2History_y = []
         self.a2_is_active = False
+        self.a3History_x = []
+        self.a3History_y = []
+        self.a3_is_active = False
 
     def compute_globals(self, al, par):
 
