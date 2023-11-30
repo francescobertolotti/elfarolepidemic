@@ -28,7 +28,6 @@ class parameters:
         self.strategyTwo = 1 - self.strategyOne # StrategyOne: Partialy with linearRegression
 
         # Agent strategyTwo parameters
-        self.useRegr = True # da togliere
         self.useRegrFrom = 3
         self.useRegrFor = 1
 

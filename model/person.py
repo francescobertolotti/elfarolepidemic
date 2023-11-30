@@ -42,7 +42,7 @@ class Person:
         
     
     def personStrategyOutputTwo(self, par, gv) -> None: # This function calculates the latest strategy for the agents every day
-        if par.useRegr and gv.t >= par.useRegrFrom:
+        if gv.t >= par.useRegrFrom:
             s_output = self.regrLinStrategyMethod(par, gv)
         else:
             s_output = self.defaultStrategyMethod()
