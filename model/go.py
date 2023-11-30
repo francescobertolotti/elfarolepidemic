@@ -26,16 +26,14 @@ def go(par, gv, al, pm):
 
     random.shuffle(gv.present_agents)
 
-    # 4 - Update output
-    gv.compute_globals(al, par)
+    
 
-    # 5 - Agents get infected
+    # 4 - Agents get infected
     person.infection_dynamics(gv, par, al)
 
+    # 5 - Update output
+    gv.compute_globals(al, par)
     
-    
-
-    gv.capacityHistory.append(gv.actualCapacity)
     if par.enablePM:
         pm.operationForDay(par, gv)
 

@@ -26,7 +26,7 @@ class Person:
     
     
     def regrLinStrategyMethod(self, par, gv):
-        regr = gv.regLine(self.person_memory)
+        regr = gv.regLine(par, self.person_memory)
         regr_output = regr[len(regr) - 1]
         return (regr_output * par.useRegrFor) + (self.defaultStrategyMethod() * (1 - par.useRegrFor))
     
@@ -81,9 +81,8 @@ class Person:
             
             ris = np.sum(compiled_memory)
             sub = np.sum(compiled_memory_sub)
-            if sub < 0.9999 or sub > 1.0001:
-                print("Errore, sub = %.2f, len(sefl.person_memory) = %d" % (sub, len(self.person_memory)))
-            
+            if (sub < 0.99999999 or sub > 1.00000001):
+                print("Errore, sub = %.20f = %.2f, len(sefl.person_memory) = %d" % (sub, sub, len(self.person_memory)))
             
             return ris
         
@@ -181,6 +180,7 @@ class Person:
             self.ContagiousWillStopAt = 0
             self.infectionStartingDay = 0
             self.infectionResistanceWillStopAt = par.infection_cantStartUntil + current_day
+            gv.recovered_agents += 1
             
             return 0
         

@@ -21,6 +21,7 @@ class parameters:
         self.infection_duration = 10 # An agent is contagious for infection_duration day
         self.people_memory_weight_arr = [0.5, 0.2, 0.1] # This is the weight agents give to each single event
         self.alpha = 0.1 # This is the weight to the new infected agents
+        self.regression_type = 1 # Indicates the regression line degree for np.polyfit function (1 = Linear regression)
 
         # Agent strategies
         self.strategyOne = 0.5 # StrategyOne: Random strategy

@@ -15,6 +15,7 @@ class glob_vars:
         self.contagious_level_sum = 0 # SCRIVERE
         self.n_infected_agents = 0 # SCRIVERE
         self.actualCapacity = par.capacity
+        self.recovered_agents = 0
 
         # Statistics
         self.attendance_history = [] # This array is composed from a series of integers rapresenting the number of people in the bar
@@ -22,6 +23,7 @@ class glob_vars:
         self.present_contagious_history = [] # This array is composed from a series of integers rapresenting the number of contagious people in the bar
         self.capacityHistory = []
         self.new_infected_history = []
+        self.recovered_agents_history = []
 
     def compute_globals(self, al, par):
 
@@ -36,31 +38,23 @@ class glob_vars:
         self.attendance_history.append(self.attendance)
         self.contagious_history.append(self.infected_attendance)
 
-    def regLine(self, arr_y, next_val = "", arr_x = ""):
+        self.recovered_agents_history.append(self.recovered_agents)
+        self.capacityHistory.append(self.actualCapacity)
+
+    def regLine(self, par, arr_y, next_val = "", arr_x = ""):
         if arr_x == "":
             arr_x = np.arange(1, len(arr_y) + 1)
         if next_val == "":
             arr_x_n = np.arange(1, len(arr_y) + 2)
         else:
             arr_x_n = np.arange(1, next_val + 1)
-        
-        n = np.size(arr_x)
 
-        x_mean = np.mean(arr_x)
-        y_mean = np.mean(arr_y)
+        coefficients = np.polyfit(arr_x, arr_y, par.regression_type)
+        regression_line = np.poly1d(coefficients)
+        res_arr = regression_line(arr_x_n)
 
-        slope_xy = np.sum(arr_x * arr_y) - n * x_mean * y_mean 
-        slope_xx = np.sum(arr_x * arr_x) - n * x_mean * x_mean
+        return res_arr
 
-        # slope_xy = np.sum((arr_x - x_mean) * (arr_y - y_mean))
-        # slope_xx = np.sum((arr_x - x_mean) ** 2)
-
-        slope = slope_xy / slope_xx
-        intercept = y_mean - slope * x_mean
-
-        regression_line = slope * arr_x_n + intercept
-
-        return regression_line
 
     
     def initialize_gv(self):
@@ -70,6 +64,7 @@ class glob_vars:
         self.n_new_infected = 0 # SCRIVERE
         self.contagious_level_sum = 0 # SCRIVERE
         self.n_infected_agents = 0 # SCRIVERE
+        self.recovered_agents = 0
 
         
     def update_present_agents_strategy(self, par):

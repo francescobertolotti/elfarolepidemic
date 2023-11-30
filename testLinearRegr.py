@@ -1,4 +1,3 @@
-import matplotlib.pyplot as plt 
 import numpy as np
 
 arr_x = np.array([1, 2, 3, 4, 5, 6, 7, 8, 9])
@@ -23,7 +22,7 @@ def regLine(arr_y, next_val = "", arr_x = ""):
 
     slope_xy = np.sum(arr_x * arr_y) - n * x_mean * y_mean 
     slope_xx = np.sum(arr_x * arr_x) - n * x_mean * x_mean
-
+    
     # slope_xy = np.sum((arr_x - x_mean) * (arr_y - y_mean))
     # slope_xx = np.sum((arr_x - x_mean) ** 2)
 
@@ -35,4 +34,24 @@ def regLine(arr_y, next_val = "", arr_x = ""):
     return regression_line, arr_x_n
 
 regression_line, arr_x_n = regLine(arr_y)
+
+
+def regLineP(arr_y, next_val = "", arr_x = ""):
+    if arr_x == "":
+        arr_x = np.arange(1, len(arr_y) + 1)
+    if next_val == "":
+        arr_x_n = np.arange(1, len(arr_y) + 2)
+    else:
+        arr_x_n = np.arange(1, next_val + 1)
+
+    coefficients = np.polyfit(arr_x, arr_y, 1)
+    regression_line = np.poly1d(coefficients)
+    res_arr = regression_line(arr_x_n)
+    
+    return res_arr, arr_x_n
+
+res_1 = str(regLine(arr_x=arr_x, arr_y=arr_y))
+res_2 = str(regLineP(arr_x=arr_x, arr_y=arr_y))
+
+print(res_2 == res_1)
 
