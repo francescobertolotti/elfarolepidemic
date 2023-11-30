@@ -12,6 +12,14 @@ class parameters:
         self.threshold = 0.5 # This threshold is used to determine if an agent will go to the bar or not depending on his strategy
         self.respect_the_max = True # This boolean rapresent if the bar capacity will be respected or not
 
+        # Agent strategies
+        self.strategyOne = 0.5 # StrategyOne: Random strategy
+        self.strategyTwo = 1 - self.strategyOne # StrategyOne: Partialy with linearRegression
+
+        # Agent strategyTwo parameters
+        self.useRegrFrom = 3 # Indicates the day from which the regression line will be used
+        self.useRegrFor = 1 # Of the total output of the strategy defined by the agent each week, the value defined by the linear regression of the previous ones impacts by a percentage defined by the parameter
+
         # Epidemic parameters
         self.num_infected_persons = 100 # Identifies the number of starting contagious people
         self.infection_cantStartUntil = 2 # how long a person is resistent to infection
@@ -23,21 +31,18 @@ class parameters:
         self.alpha = 0.1 # This is the weight to the new infected agents
         self.regression_type = 1 # Indicates the regression line degree for np.polyfit function (1 = Linear regression)
 
-        # Agent strategies
-        self.strategyOne = 0.5 # StrategyOne: Random strategy
-        self.strategyTwo = 1 - self.strategyOne # StrategyOne: Partialy with linearRegression
-
-        # Agent strategyTwo parameters
-        self.useRegrFrom = 3
-        self.useRegrFor = 1
-
 
 
         # PM parameters
-        self.enablePM = True
+        self.enablePM = True # Enable Policy Maker
+        self.enableA1 = True # Enable strategy a1
+        self.enableA2 = True # Enable strategy a2
+        self.enableA3 = True # Enable strategy a3
+
+        # PM a1
         self.a1_reductionPerc = 0.8
         self.a1_reductionDuration = 10
-        self.a1_InfectedTreshold = 750
+        self.a1_InfectedTreshold = 0.375 # Percentage of infected above to activate strategy a1 for PM, calculated on self.n_persons
 
         
         

@@ -5,7 +5,13 @@ class PM:
     def __init__(self, par) -> None:
         
         # Parameters
-        self.operationsArr = ["a1InitCheck"]
+        self.operationsArr = []
+        if par.enableA1:
+            self.operationsArr.append("a1InitCheck")
+        if par.enableA2:
+            self.operationsArr.append("a2InitCheck")
+        if par.enableA3:
+            self.operationsArr.append("a3InitCheck")
         
         # States
         self.a1OldCapacity = 0
@@ -15,7 +21,7 @@ class PM:
         self.PM_interactionCounter = 0 # Indentifies a conunter that indicates the number of times the PM interacts with the system
 
     def a1Init_capacityReductionInit(self, par, gv):
-        if gv.infected_attendance >= par.a1_InfectedTreshold:
+        if gv.infected_attendance >= (par.a1_InfectedTreshold * par.n_persons):
             self.operationsArr.remove("a1InitCheck")
             self.PM_interactionCounter += 1
             self.a1StartingDayReduction = gv.t
@@ -25,8 +31,7 @@ class PM:
     def a1Init_capacityReductionEnd(self, par, gv):
         if gv.t > (self.a1StartingDayReduction + par.a1_reductionDuration):
             self.a1StartingDayReduction = gv.t
-            if gv.infected_attendance < par.a1_InfectedTreshold:
-                
+            if gv.infected_attendance < (par.a1_InfectedTreshold * par.n_persons):
                 self.operationsArr.remove("a1EndCheck")
                 self.a1StartingDayReduction = 0
                 gv.actualCapacity = par.capacity
