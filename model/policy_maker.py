@@ -17,6 +17,8 @@ class PM:
         self.a1OldCapacity = 0
         self.a1StartingDayReduction = par.a1_reductionDuration
 
+        self.a2StartingDayReduction = par.a2_reductionDuration
+
         # Output
         self.PM_interactionCounter = 0 # Indentifies a conunter that indicates the number of times the PM interacts with the system
 
@@ -36,9 +38,30 @@ class PM:
                 self.a1StartingDayReduction = 0
                 gv.actualCapacity = par.capacity
                 self.operationsArr.append("a1InitCheck")
+    
+    def a2Init_faceMaskInit(self, par, gv):
+        if gv.infected_attendance >= (par.a2_InfectedTreshold * par.n_persons):
+            self.a2StartingDayReduction = gv.t
+            self.operationsArr.remove("a2InitCheck")
+            self.operationsArr.append("a2EndCheck")
+            gv.a2_is_active = True
+    
+    def a2Init_faceMaskEnd(self, par, gv):
+        gv.a2History_x.append(gv.t)
+        gv.a2History_y.append(-5)
+        if gv.t > (self.a2StartingDayReduction + par.a2_reductionDuration):
+            self.a2StartingDayReduction = gv.t
+            if gv.infected_attendance < (par.a2_InfectedTreshold * par.n_persons):
+                self.operationsArr.remove("a2EndCheck")
+                self.operationsArr.append("a2InitCheck")
+                gv.a2_is_active = False
 
     def operationForDay(self, par, gv):
         if "a1InitCheck" in self.operationsArr:
             self.a1Init_capacityReductionInit(par, gv)
         if "a1EndCheck" in self.operationsArr:
             self.a1Init_capacityReductionEnd(par, gv)
+        if "a2InitCheck" in self.operationsArr:
+            self.a2Init_faceMaskInit(par, gv)
+        if "a2EndCheck" in self.operationsArr:
+            self.a2Init_faceMaskEnd(par, gv)

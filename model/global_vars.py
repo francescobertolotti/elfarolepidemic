@@ -21,9 +21,15 @@ class glob_vars:
         self.attendance_history = [] # This array is composed from a series of integers rapresenting the number of people in the bar
         self.contagious_history = [] # This array is composed from a series of integers rapresenting the number of contagious people
         self.present_contagious_history = [] # This array is composed from a series of integers rapresenting the number of contagious people in the bar
-        self.capacityHistory = []
+        
         self.new_infected_history = []
         self.recovered_agents_history = []
+
+        # PM
+        self.capacityHistory = []
+        self.a2History_x = []
+        self.a2History_y = []
+        self.a2_is_active = False
 
     def compute_globals(self, al, par):
 

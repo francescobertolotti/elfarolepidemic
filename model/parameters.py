@@ -44,5 +44,12 @@ class parameters:
         self.a1_reductionDuration = 10
         self.a1_InfectedTreshold = 0.375 # Percentage of infected above to activate strategy a1 for PM, calculated on self.n_persons
 
-        
+        # PM a2
+        self.a2_faceMask1Agents = 0.6
+        self.a2_faceMask2Agents = 0.3
+        self.a2_faceMask0Agents = 1 - self.a2_faceMask1Agents - self.a2_faceMask2Agents
+        self.a2_faceMask1Perc = 0.4
+        self.a2_faceMask2Perc = 0.6
+        self.a2_reductionDuration = 10
+        self.a2_InfectedTreshold = 0.375 # Percentage of infected above to activate strategy a2 for PM, calculated on self.n_persons
         
