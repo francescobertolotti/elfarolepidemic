@@ -259,8 +259,8 @@ class Person:
         present_agents_susceptible_infectable = [ag for ag in gv.present_agents if ag.canAgentBeInfected(par, gv) and not ag.getIfInfected()] # This is a list of agents that could be infected
         cont = 0
 
-        a2_t_1 = par.infection_threshold * (1 + par.a2_faceMask1Perc)
-        a2_t_2 = par.infection_threshold * (1 + par.a2_faceMask2Perc)
+        a2_t_1 = par.infection_threshold + par.a2_faceMask1Perc
+        a2_t_2 = par.infection_threshold + par.a2_faceMask2Perc
 
         for infected_agent in present_agents_infected:
             if infected_agent.levelContagious >= par.infection_threshold and infected_agent.levelContagious <= par.infection_thresholdNotPresent:
@@ -273,13 +273,13 @@ class Person:
                             elif ag_to_infect.facemaskType == 2:
                                 real_treshold = a2_t_2
                             elif ag_to_infect.facemaskType == 0:
-                                real_treshold = par.infection_threshold                
+                                real_treshold = par.infection_threshold       
                         else:
                             real_treshold = par.infection_threshold
                         if infected_agent.levelContagious >= real_treshold:
                             present_agents_susceptible_infectable.remove(ag_to_infect)
                             ag_to_infect.initiateContagius(par, gv)
-                        cont += 1
+                            cont += 1
                     else:
                         break
 

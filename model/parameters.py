@@ -13,11 +13,11 @@ class parameters:
         self.respect_the_max = True # This boolean rapresent if the bar capacity will be respected or not
 
         # Agent strategies
-        self.strategyOne = 0.5 # StrategyOne: Random strategy
+        self.strategyOne = 0.1 # StrategyOne: Random strategy
         self.strategyTwo = 1 - self.strategyOne # StrategyOne: Partialy with linearRegression
 
         # Agent strategyTwo parameters
-        self.useRegrFrom = 3 # Indicates the day from which the regression line will be used
+        self.useRegrFrom = 10 # Indicates the day from which the regression line will be used
         self.useRegrFor = 1 # Of the total output of the strategy defined by the agent each week, the value defined by the linear regression of the previous ones impacts by a percentage defined by the parameter
 
         # Epidemic parameters
@@ -28,7 +28,7 @@ class parameters:
         self.infection_thresholdNotPresent = 0.8 # the level beyond which an agent is not going to the bar
         self.infection_duration = 10 # An agent is contagious for infection_duration day
         self.people_memory_weight_arr = [0.5, 0.2, 0.1] # This is the weight agents give to each single event
-        self.alpha = 0.1 # This is the weight to the new infected agents
+        self.alpha = 0.2 # This is the weight to the new infected agents
         self.regression_type = 1 # Indicates the regression line degree for np.polyfit function (1 = Linear regression)
 
 
@@ -36,24 +36,25 @@ class parameters:
         # PM parameters
         self.enablePM = True # Enable Policy Maker
         self.enableA1 = True # Enable strategy a1
-        self.enableA2 = True # Enable strategy a2
-        self.enableA3 = True # Enable strategy a3
+        self.enableA2 = False # Enable strategy a2
+        self.enableA3 = False # Enable strategy a3
 
         # PM a1
-        self.a1_reductionPerc = 0.8
+        self.a1_reductionPerc = 0.2
         self.a1_reductionDuration = 10
         self.a1_InfectedTreshold = 0.375 # Percentage of infected above to activate strategy a1 for PM, calculated on self.n_persons
 
         # PM a2
-        self.a2_faceMask1Agents = 0.6
-        self.a2_faceMask2Agents = 0.3
+        self.a2_faceMask1Agents = 0.5
+        self.a2_faceMask2Agents = 0.5
         self.a2_faceMask0Agents = 1 - self.a2_faceMask1Agents - self.a2_faceMask2Agents
-        self.a2_faceMask1Perc = 0.4
-        self.a2_faceMask2Perc = 0.6
-        self.a2_reductionDuration = 10
-        self.a2_InfectedTreshold = 0.375 # Percentage of infected above to activate strategy a2 for PM, calculated on self.n_persons
+        self.a2_faceMask1Perc = 0.1
+        self.a2_faceMask2Perc = 0.3
+        self.a2_reductionDuration = 1
+        self.a2_InfectedTreshold = 0.01 # Percentage of infected above to activate strategy a2 for PM, calculated on self.n_persons
         
         # PM a3
+        self.a3_ = 0 # Nei casi in cui fa dovrebbe funzuionare comunque sbaglia e fa entrare
         self.a3_testFailUnder = 0.2
         self.a3_reductionDuration = 1
-        self.a3_InfectedTreshold = 0.5 
+        self.a3_InfectedTreshold = 0.2
