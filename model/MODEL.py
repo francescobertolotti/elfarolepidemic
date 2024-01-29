@@ -19,6 +19,9 @@ class model():
         random.seed(my_seed)
         np.random.seed(seed=my_seed)
 
+        self.qTable = np.zeros([2,4])
+
+
         self.al = agents_list()
         self.par = parameters()
         self.gv = glob_vars(self.par)
@@ -35,5 +38,59 @@ class model():
         conclusions().Chart(par=self.par, gv=self.gv)
 
         return self.gv
+    
+    def run_qTable(self, my_seed: int = 0):
+        
+        self.par.enablePM = False
+        self.par.enableA1 = False
+        self.par.enableA1 = False
+        self.par.enableA1 = False
+        self.pm = PM(self.par)
+        self.run(my_seed=my_seed)
+        
+        self.qTable[0, 0] = sum(self.gv.infected_cost_history)
+
+        self.al = agents_list()
+        self.par = parameters()
+        self.gv = glob_vars(self.par)
+        self.par.enablePM = False
+        self.par.enableA1 = False
+        self.par.enableA1 = False
+        self.par.enableA1 = False
+        self.pm = PM(self.par)
+        setup(self.par, self.gv, self.al)
+        self.run(my_seed=my_seed)
+        
+        self.qTable[0, 1] = sum(self.gv.infected_cost_history)
+
+
+        self.al = agents_list()
+        self.par = parameters()
+        self.gv = glob_vars(self.par)
+        self.par.enablePM = True
+        self.par.enableA1 = False
+        self.par.enableA1 = True
+        self.par.enableA1 = False
+        self.pm = PM(self.par)
+        setup(self.par, self.gv, self.al)
+        self.run(my_seed=my_seed)
+
+        self.qTable[0, 2] = sum(self.gv.infected_cost_history)
+
+
+        self.al = agents_list()
+        self.par = parameters()
+        self.gv = glob_vars(self.par)
+        self.par.enablePM = True
+        self.par.enableA1 = True
+        self.par.enableA1 = False
+        self.par.enableA1 = True
+        self.pm = PM(self.par)
+        setup(self.par, self.gv, self.al)
+        self.run(my_seed=my_seed)
+
+        self.qTable[0, 3] = sum(self.gv.infected_cost_history)
+
+        print(self.qTable)
 
 

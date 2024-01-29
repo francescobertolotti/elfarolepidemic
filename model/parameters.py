@@ -30,6 +30,7 @@ class parameters:
         self.people_memory_weight_arr = [0.5, 0.2, 0.1] # This is the weight agents give to each single event
         self.alpha = 0.2 # This is the weight to the new infected agents
         self.regression_type = 1 # Indicates the regression line degree for np.polyfit function (1 = Linear regression)
+        self.infection_cost = 1
 
 
 
@@ -43,6 +44,7 @@ class parameters:
         self.a1_reductionPerc = 0.2
         self.a1_reductionDuration = 10
         self.a1_InfectedTreshold = 0.375 # Percentage of infected above to activate strategy a1 for PM, calculated on self.n_persons
+        self.a1_cost = 0.2
 
         # PM a2
         self.a2_faceMask1Agents = 0.5
@@ -52,9 +54,11 @@ class parameters:
         self.a2_faceMask2Perc = 0.3
         self.a2_reductionDuration = 1
         self.a2_InfectedTreshold = 0.01 # Percentage of infected above to activate strategy a2 for PM, calculated on self.n_persons
-        
+        self.a2_cost = 0.2
+
         # PM a3
         self.a3_ = 0 # Nei casi in cui fa dovrebbe funzuionare comunque sbaglia e fa entrare
         self.a3_testFailUnder = 0.2
         self.a3_reductionDuration = 1
         self.a3_InfectedTreshold = 0.2
+        self.a3_cost = 0.2

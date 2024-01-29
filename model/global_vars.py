@@ -25,6 +25,13 @@ class glob_vars:
         self.new_infected_history = []
         self.recovered_agents_history = []
 
+        self.infected_cost_history = []
+        self.a1_cost_history = []
+        self.a2_cost_history = []
+        self.a3_cost_history = []
+
+        self.qTable_epoch = np.zeros([2,4])
+
         # PM
         self.capacityHistory = []
         self.a2History_x = []
@@ -33,6 +40,8 @@ class glob_vars:
         self.a3History_x = []
         self.a3History_y = []
         self.a3_is_active = False
+
+
 
     def compute_globals(self, al, par):
 
@@ -49,6 +58,10 @@ class glob_vars:
 
         self.recovered_agents_history.append(self.recovered_agents)
         self.capacityHistory.append(self.actualCapacity)
+
+        self.infected_cost_history.append(par.a1_cost * self.infected_attendance)
+
+       
 
     def regLine(self, par, arr_y, next_val = "", arr_x = ""):
         if arr_x == "":
@@ -75,6 +88,7 @@ class glob_vars:
         self.n_infected_agents = 0 # SCRIVERE
         self.recovered_agents = 0
 
+        
         
     def update_present_agents_strategy(self, par):
         if par.respect_the_max:

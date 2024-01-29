@@ -89,3 +89,6 @@ class PM:
             self.a3Init_entranceTestInit(par, gv)
         if "a3EndCheck" in self.operationsArr:
             self.a3Init_entranceTestEnd(par, gv)
+
+        if gv.t == 1:
+            print(self.operationsArr)

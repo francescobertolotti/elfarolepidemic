@@ -27,7 +27,7 @@ def go(par, gv, al, pm):
     random.shuffle(gv.present_agents)
 
     
-
+    
     # 4 - Agents get infected
     person.infection_dynamics(gv, par, al)
 
