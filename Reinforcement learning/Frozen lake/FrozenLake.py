@@ -85,11 +85,12 @@ Init:
                 if (terminated or truncated) and reward == 0:
                     reward = -1 * self.r_t
                     self.success_history.append(0)
-
+                    
                 if (terminated or truncated) and reward == 1:
                     self.success_history.append(1)
                     self.steps_success_history.append(cont)
 
+                print(self.qtable[state, action] + self.a * (reward + self.y * np.max(self.qtable[new_state]) - self.qtable[state, action]))
                 self.qtable[state, action] = self.qtable[state, action] + self.a * (reward + self.y * np.max(self.qtable[new_state]) - self.qtable[state, action])
                 
                 latest_log = f'''

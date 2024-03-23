@@ -37,28 +37,47 @@ class parameters:
         # PM parameters
         self.enablePM = True # Enable Policy Maker
         self.enableA1 = True # Enable strategy a1
-        self.enableA2 = False # Enable strategy a2
-        self.enableA3 = False # Enable strategy a3
+        self.enableA2 = True # Enable strategy a2
+        self.enableA3 = True # Enable strategy a3
 
         # PM a1
-        self.a1_reductionPerc = 0.2
+        self.a1_reductionPerc = 0.45
         self.a1_reductionDuration = 10
         self.a1_InfectedTreshold = 0.375 # Percentage of infected above to activate strategy a1 for PM, calculated on self.n_persons
-        self.a1_cost = 0.2
+        self.a1_cost = 0.8
+        self.a1_reduction_revenues = 1
 
         # PM a2
         self.a2_faceMask1Agents = 0.5
         self.a2_faceMask2Agents = 0.5
         self.a2_faceMask0Agents = 1 - self.a2_faceMask1Agents - self.a2_faceMask2Agents
-        self.a2_faceMask1Perc = 0.1
-        self.a2_faceMask2Perc = 0.3
+        self.a2_faceMask1Perc = 0.2
+        self.a2_faceMask2Perc = 0.4
         self.a2_reductionDuration = 1
         self.a2_InfectedTreshold = 0.01 # Percentage of infected above to activate strategy a2 for PM, calculated on self.n_persons
-        self.a2_cost = 0.2
+        self.a2_cost = 0.6
+        self.a2_reduction_revenues = 1
 
         # PM a3
-        self.a3_ = 0 # Nei casi in cui fa dovrebbe funzuionare comunque sbaglia e fa entrare
-        self.a3_testFailUnder = 0.2
+        # self.a3_ = 0 
+        self.a3_testFailUnder = 0.25 # Nei casi in cui fa dovrebbe funzuionare comunque sbaglia e fa entrare
         self.a3_reductionDuration = 1
         self.a3_InfectedTreshold = 0.2
-        self.a3_cost = 0.2
+        self.a3_cost = 0.4
+        self.a3_reduction_revenues = 1
+
+        # PM Reinforcement leaning
+        self.enableRL = True
+        self.epsilon_RL = 0.6
+        self.alpha_RL = 0.1
+
+        self.infection_slope_regr_len = 5
+        
+        self.store_q_table = True
+        self.stat_from_stored_q_table = True
+        self.stored_q_table_id = 'last'
+
+        self.clear_q_table_memory = False
+
+        # Settings
+        self.draw_conclusions = True

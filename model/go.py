@@ -1,6 +1,5 @@
 # import libraries
 import random
-from joblib import Parallel, delayed
 
 def go(par, gv, al, pm):
     

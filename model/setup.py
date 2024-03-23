@@ -31,6 +31,8 @@ def setup(par, gv, al):
 
         al.persons_list.append(new_person)
     
+    # Clearing q-table data if needed
+    gv.clear_q_table(par)
 
-        
+    
 

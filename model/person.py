@@ -267,19 +267,21 @@ class Person:
                 for  i in range(n_new_infected):
                     if len(present_agents_susceptible_infectable) > 0:
                         ag_to_infect = random.choice(present_agents_susceptible_infectable)
-                        if par.enableA2 and par.enablePM:
+                        if par.enableA2 and par.enablePM and gv.a2_is_active:
                             if ag_to_infect.facemaskType == 1:
                                 real_treshold = a2_t_1
                             elif ag_to_infect.facemaskType == 2:
                                 real_treshold = a2_t_2
                             elif ag_to_infect.facemaskType == 0:
-                                real_treshold = par.infection_threshold       
+                                real_treshold = par.infection_threshold    
                         else:
                             real_treshold = par.infection_threshold
+                        
                         if infected_agent.levelContagious >= real_treshold:
                             present_agents_susceptible_infectable.remove(ag_to_infect)
                             ag_to_infect.initiateContagius(par, gv)
                             cont += 1
+                            
                     else:
                         break
 
