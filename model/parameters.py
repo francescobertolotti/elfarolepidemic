@@ -52,7 +52,7 @@ class parameters:
         self.a2_faceMask2Agents = 0.5
         self.a2_faceMask0Agents = 1 - self.a2_faceMask1Agents - self.a2_faceMask2Agents
         self.a2_faceMask1Perc = 0.2
-        self.a2_faceMask2Perc = 0.4
+        self.a2_faceMask2Perc = 0.3
         self.a2_reductionDuration = 1
         self.a2_InfectedTreshold = 0.01 # Percentage of infected above to activate strategy a2 for PM, calculated on self.n_persons
         self.a2_cost = 0.6
@@ -68,7 +68,7 @@ class parameters:
 
         # PM Reinforcement leaning
         self.enableRL = True
-        self.epsilon_RL = 0.6
+        self.epsilon_RL = 0.2
         self.alpha_RL = 0.1
 
         self.infection_slope_regr_len = 5
