@@ -230,8 +230,7 @@ class Person:
             if present_agent.levelContagious >= par.infection_threshold: gv.contagious_level_sum += present_agent.levelContagious
 
         for present_agent in gv.present_agents: # This will calculate n_infected_agents
-            if present_agent.getIfInfected():
-                gv.n_infected_agents += 1
+            if present_agent.getIfInfected(): gv.n_infected_agents += 1
         
         gv.present_contagious_history.append(gv.n_infected_agents)
 
@@ -239,7 +238,8 @@ class Person:
         
         try:
             #n_new_infected = int(math.ceil(gv.contagious_level_sum * n_susceptible_agents / (n_susceptible_agents + gv.n_infected_agents))) # This is the n of agents that will be infected this day
-            n_new_infected = int(0.5 + par.alpha * gv.contagious_level_sum * n_susceptible_agents / (par.capacity)) # This is the n of agents that will be infected this day
+            # n_new_infected = int(0.5 + par.alpha * gv.contagious_level_sum * n_susceptible_agents / (par.capacity)) # This is the n of agents that will be infected this day
+            n_new_infected = int(0.5 + par.alpha * gv.contagious_level_sum * n_susceptible_agents / (len(gv.present_agents))) # This is the n of agents that will be infected this day
         except:
             print('Error day %d, divison0 %.2f' % (gv.t, (par.capacity)))
             n_new_infected = 0
@@ -270,12 +270,9 @@ class Person:
 
                         # PM
                         if par.enableA2 and par.enablePM and gv.a2_is_active:
-                            if ag_to_infect.facemaskType == 1:
-                                real_treshold = a2_t_1
-                            elif ag_to_infect.facemaskType == 2:
-                                real_treshold = a2_t_2
-                            elif ag_to_infect.facemaskType == 0:
-                                real_treshold = par.infection_threshold    
+                            if ag_to_infect.facemaskType == 1: real_treshold = a2_t_1
+                            elif ag_to_infect.facemaskType == 2: real_treshold = a2_t_2
+                            elif ag_to_infect.facemaskType == 0: real_treshold = par.infection_threshold    
                         else:
                             real_treshold = par.infection_threshold
                         

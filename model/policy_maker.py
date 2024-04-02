@@ -21,7 +21,7 @@ class PM:
 
         self.a2StartingDayReduction = par.a2_reductionDuration
 
-        self.a3StartingDayReduction = par.a2_reductionDuration
+        self.a3StartingDayReduction = par.a3_reductionDuration
 
         # Output
         self.PM_interactionCounter = 0 # Indentifies a conunter that indicates the number of times the PM interacts with the system
@@ -203,11 +203,12 @@ class PM:
                         action = np.argmax(q_table_i)
                 
                 
-
+                stati= {
+                    1: (0, 1, 1)
+                }
 
                 if action == 0:
                     self.a1Init_capacityReductionInit(par, gv)
-
                 if action == 1:
                     self.a2Init_faceMaskInit(par, gv)                    
                 if action == 2:
