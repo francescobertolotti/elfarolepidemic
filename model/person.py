@@ -227,7 +227,7 @@ class Person:
     def infection_dynamics(self, gv, par, al):
 
         for present_agent in gv.present_agents: # This will calculate contagious_level_sum
-            gv.contagious_level_sum += present_agent.levelContagious
+            if present_agent.levelContagious >= par.infection_threshold: gv.contagious_level_sum += present_agent.levelContagious
 
         for present_agent in gv.present_agents: # This will calculate n_infected_agents
             if present_agent.getIfInfected():
@@ -264,9 +264,11 @@ class Person:
 
         for infected_agent in present_agents_infected:
             if infected_agent.levelContagious >= par.infection_threshold and infected_agent.levelContagious <= par.infection_thresholdNotPresent:
-                for  i in range(n_new_infected):
+                for i in range(n_new_infected):
                     if len(present_agents_susceptible_infectable) > 0:
                         ag_to_infect = random.choice(present_agents_susceptible_infectable)
+
+                        # PM
                         if par.enableA2 and par.enablePM and gv.a2_is_active:
                             if ag_to_infect.facemaskType == 1:
                                 real_treshold = a2_t_1
