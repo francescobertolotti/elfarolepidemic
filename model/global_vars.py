@@ -29,10 +29,7 @@ class glob_vars:
         self.new_infected_history = []
         self.recovered_agents_history = []
 
-        self.infected_cost_history = []
-        self.a1_cost_history = []
-        self.a2_cost_history = []
-        self.a3_cost_history = []
+        
 
 
         # PM
@@ -44,11 +41,26 @@ class glob_vars:
         self.a3History_x = []
         self.a3History_y = []
         self.a3_is_active = False
+        self.a3_cost_is_relevant = True
 
         # Q - Learning
         if par.RL_mode == 1: self.q_table = np.zeros([12, 3])
         else: self.q_table = np.zeros([12, 8])
 
+
+        # Value
+
+        self.a1_cost_history = []
+        self.a2_cost_history = []
+        self.a3_cost_history = []
+
+        self.C_a_cost_history = []
+        self.C_n_i_cost_history = []
+
+        self.C_cost_history = []
+
+        self.R_revenues_history = []
+        
 
     def compute_globals(self, al, par):
 
@@ -66,7 +78,7 @@ class glob_vars:
         self.recovered_agents_history.append(self.recovered_agents)
         self.capacityHistory.append(self.actualCapacity)
 
-        self.infected_cost_history.append(par.a1_cost * self.infected_attendance)
+        
 
        
 
@@ -186,6 +198,42 @@ class glob_vars:
     def clear_q_table(self, par):
         if par.clear_q_table_memory:
             self.jsonWriter('model/qTable/qData.json', {"selected": 1, "data": []})
+
+
+    def calculate_value(self, par):
+        if par.enablePM:
+
+            if par.enableA1 and self.a1_is_active: a1_cost = self.actualCapacity * par.a1_cost * 1 # Da rivedere
+            else: a1_cost = 0
+
+            self.a1_cost_history.append(a1_cost)
+            
+            if par.enableA2 and self.a2_is_active: a2_cost = self.actualCapacity * par.a2_cost # Da sistemare con suddivisione mascherine
+            else: a2_cost = 0
+            
+            self.a2_cost_history.append(a2_cost)
+
+            if par.enableA3 and self.a3_is_active and self.a3_cost_is_relevant:
+                a3_cost = par.a3_cost # Da sistemare con suddivisione mascherine
+                self.a3_cost_is_relevant = False
+            else: a3_cost = 0
+                
+            self.a2_cost_history.append(a3_cost)
+
+            C_a_cost = a1_cost + a2_cost + a3_cost
+            self.C_a_cost_history.append(C_a_cost)
+
+        C_n_i_cost = par.delta * self.new_infected_history[-1]
+        self.C_n_i_cost_history.append(C_n_i_cost)
+
+        self.C_cost_history.append(C_a_cost + C_n_i_cost)
+
+        R_rev = self.recovered_agents * par.r
+        self.R_revenues_history.append(R_rev)
+
+        # print(f'R_rev: {R_rev}, a_1: {a1_cost}, a_2: {a2_cost}, a3: {a3_cost}, C_a {C_a_cost}, C_n_i {C_n_i_cost}, {self.new_infected_history}')
+
+
 
 class agents_list:
     def __init__(self):

@@ -32,7 +32,8 @@ def go(par, gv, al, pm):
 
     # 5 - Update output
     gv.compute_globals(al, par)
-    
+    gv.calculate_value(par)
+
     if par.enablePM:
         pm.operationForDay(par, gv)
 

@@ -434,11 +434,11 @@ class PM:
 
                 if np.max(q_table_i) == 0:
                     action = random.choice(list(current_dict.keys()))
-                    print('Action on random zero: ', action)
+                    # print('Action on random zero: ', action)
                 else:
                     if random.random() >= par.epsilon_RL:
                         action = random.choice(list(current_dict.keys()))
-                        print('Action on random: ', action)
+                        # print('Action on random: ', action)
                     else:    
                         action = 0
                         current_max = 0
@@ -447,7 +447,7 @@ class PM:
                             if i in current_dict.keys() and el > current_max:
                                 current_max = el
                                 action = i
-                        print('Action on max: ', action)
+                        # print('Action on max: ', action)
 
                 
                 

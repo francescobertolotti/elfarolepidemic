@@ -40,6 +40,10 @@ class parameters:
         self.enableA2 = True # Enable strategy a2
         self.enableA3 = True # Enable strategy a3
 
+        self.delta = 1 # The cost that new infections have
+
+        self.r = 1 # Revenue for each recovered agent
+
         # PM a1
         self.a1_reductionPerc = 0.45
         self.a1_reductionDuration = 10
@@ -63,7 +67,7 @@ class parameters:
         self.a3_testFailUnder = 0.25 # Nei casi in cui fa dovrebbe funzuionare comunque sbaglia e fa entrare
         self.a3_reductionDuration = 1
         self.a3_InfectedTreshold = 0.2
-        self.a3_cost = 0.4
+        self.a3_cost = 5000
         self.a3_reduction_revenues = 1
 
         # PM Reinforcement leaning
