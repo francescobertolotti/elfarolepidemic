@@ -2,6 +2,7 @@
 import random
 import numpy as np
 import math
+import warnings
 
 
 class Person:
@@ -57,7 +58,10 @@ class Person:
         if len(self.person_memory) > 1:
             compiled_memory = []
             compiled_memory_sub = []
+
+
             general_weight = (1 - np.sum(par.people_memory_weight_arr)) / (len(self.person_memory) - len(par.people_memory_weight_arr))
+            
             if len(self.person_memory) > len(par.people_memory_weight_arr):
                 prov_people_memory_weight_arr = par.people_memory_weight_arr
             else:
@@ -244,15 +248,6 @@ class Person:
             print('Error day %d, divison0 %.2f' % (gv.t, (par.capacity)))
             n_new_infected = 0
         
-        '''
-        cont = 0
-        present_agents_susceptible = [ag for ag in gv.present_agents if not ag.getIfInfected()] # This is a list of agents that could be infected
-        present_agents_infected = [ag for ag in gv.present_agents if ag.getIfInfected()] # This is a list of agents that are infected
-        new_infected = random.sample(present_agents_susceptible, n_new_infected) # This is a list of agents that will be infected
-        for agent in new_infected: # This will infect the agents
-            agent.initiateContagius(par, gv) 
-            cont += 1
-        '''
 
         present_agents_susceptible = [ag for ag in gv.present_agents if not ag.getIfInfected()] # This is a list of agents that could be infected
         present_agents_infected = [ag for ag in gv.present_agents if ag.getIfInfected()] # This is a list of agents that are infected
@@ -284,40 +279,6 @@ class Person:
                     else:
                         break
 
-        '''
-        cont = 0
-        cont_a = 0
-        present_agents_infected = [ag for ag in gv.present_agents if ag.getIfInfected()] # This is a list of agents that could be infected
-        for p_i_a in present_agents_infected:
-            if p_i_a.levelContagious >= par.infection_threshold and p_i_a.levelContagious <= par.infection_thresholdNotPresent:
-                present_agents_susceptible = [ag for ag in gv.present_agents if not ag.getIfInfected()] # This is a list of agents that could be infected
-                n_new_infected_per_agent = n_new_infected
-                if n_new_infected_per_agent >= len(present_agents_susceptible): n_new_infected_per_agent = (len(present_agents_susceptible) - 1)
-                new_infected = random.sample(present_agents_susceptible, len(present_agents_susceptible))
-                cont_a = 0
-                while n_new_infected_per_agent > 0:
-                    print(cont_a, n_new_infected_per_agent, len(present_agents_susceptible), n_new_infected, len(new_infected), new_infected)
-                    new_infected_by_a = new_infected[cont_a]
-                    
-                    cont_a += 1
-                    if not new_infected_by_a.getIfInfected():
-                        contagious_execution = new_infected_by_a.initiateContagius(par, gv)
-                        if contagious_execution:
-                            cont += 1
-                            n_new_infected_per_agent -= 1
-        
-        '''
+
         gv.new_infected_history.append(cont)
-        # cont_debug = 0
-        # totInfectedWeekByAgent = 0 # This is a counter for people infected this week by each agent
-        # for present_infectious_agent in gv.present_agents: # For each infectous agents between the present agents
-        #     totInfectedWeekByAgent = n_new_infected
-        #     if present_infectious_agent.levelContagious >= par.infection_threshold and present_infectious_agent.levelContagious <= par.infection_thresholdNotPresent: # If the agent can infect other agents
-        #         for present_agent in gv.present_agents: # For each present agent
-        #             if present_agent.getIfInfected() == False: # If not infected
-        #                 if totInfectedWeekByAgent > 0: # InitiateContagious for n_new_infected agents
-        #                     cont_debug += 1
-        #                     contagious_execution = present_agent.initiateContagius(par, gv) # InitiateContagious of present agent
-        #                     if contagious_execution:
-        #                         totInfectedWeekByAgent -= 1 # The counter for the people that could be infected by de agent, decrease by one
-        #print(n_new_infected*gv.n_infected_agents, cont_debug, gv.t)
+        

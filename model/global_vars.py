@@ -2,6 +2,7 @@
 import numpy as np
 import json
 import os
+import warnings
 
 class glob_vars:
     
@@ -19,6 +20,7 @@ class glob_vars:
         self.actualCapacity = par.capacity
         self.recovered_agents = 0
 
+
         # Statistics
         self.attendance_history = [] # This array is composed from a series of integers rapresenting the number of people in the bar
         self.contagious_history = [] # This array is composed from a series of integers rapresenting the number of contagious people
@@ -35,6 +37,7 @@ class glob_vars:
 
         # PM
         self.capacityHistory = []
+        self.a1_is_active = False
         self.a2History_x = []
         self.a2History_y = []
         self.a2_is_active = False
@@ -43,7 +46,8 @@ class glob_vars:
         self.a3_is_active = False
 
         # Q - Learning
-        self.q_table = np.zeros([12, 3])
+        if par.RL_mode == 1: self.q_table = np.zeros([12, 3])
+        else: self.q_table = np.zeros([12, 8])
 
 
     def compute_globals(self, al, par):
@@ -91,7 +95,10 @@ class glob_vars:
         if arr_y == []: arr_y = self.last_infected(n=par.infection_slope_regr_len)
         
         arr_x = np.arange(1, len(arr_y) + 1)
-        coefficients = np.polyfit(arr_x, arr_y, 1)
+        
+        with warnings.catch_warnings():
+            warnings.filterwarnings('ignore', r'All-NaN (slice|axis) encountered')
+            coefficients = np.polyfit(arr_x, arr_y, 1)
 
         return coefficients
     

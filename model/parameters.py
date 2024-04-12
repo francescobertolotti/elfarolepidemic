@@ -68,8 +68,14 @@ class parameters:
 
         # PM Reinforcement leaning
         self.enableRL = True
+        self.RL_mode = 2
+
+        self.a_reductionDuration = 5 # General reduction duration for self.RL_mode = 2
+
         self.epsilon_RL = 0.2
         self.alpha_RL = 0.1
+
+        self.RL_PM_t_min = 7
 
         self.infection_slope_regr_len = 5
         
