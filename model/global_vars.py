@@ -10,6 +10,7 @@ class glob_vars:
         
         # Global Variables
         self.t = 0 #time step of the simulation
+        self.t_history = []
         self.attendance = 0  # This integer rapresent the n of the agents going to the bar each time step
         self.present_agents = [] # This is the array containing al the agents that will be in the bar each day
         self.infected_attendance = 0 # This integer rapresent the n of the agents which are infected each day
@@ -35,18 +36,22 @@ class glob_vars:
         # PM
         self.capacityHistory = []
         self.a1_is_active = False
+        self.a1_is_active_history = []
         self.a2History_x = []
         self.a2History_y = []
         self.a2_is_active = False
+        self.a2_is_active_history = []
         self.a3History_x = []
         self.a3History_y = []
         self.a3_is_active = False
+        self.a3_is_active_history = []
         self.a3_cost_is_relevant = True
 
         # Q - Learning
         if par.RL_mode == 1: self.q_table = np.zeros([12, 3])
         else: self.q_table = np.zeros([12, 8])
 
+        self.export_q_table = {}
 
         # Value
 
@@ -183,14 +188,13 @@ class glob_vars:
 
 
             arr = json_q_table['data']
-            arr.append(
-                {
+            self.export_q_table = {
                    'id': str(len(arr) + 1),
                    'precedent': str(precedent_id),
                    'q-table': self.q_table.tolist()
                 }
-            )
-
+            arr.append(self.export_q_table)
+            
             json_q_table['data'] = arr
             
             self.jsonWriter('model/qTable/qData.json', json_q_table)
@@ -212,13 +216,13 @@ class glob_vars:
             else: a2_cost = 0
             
             self.a2_cost_history.append(a2_cost)
-
+            
             if par.enableA3 and self.a3_is_active and self.a3_cost_is_relevant:
-                a3_cost = par.a3_cost # Da sistemare con suddivisione mascherine
+                a3_cost = par.a3_cost 
                 self.a3_cost_is_relevant = False
             else: a3_cost = 0
                 
-            self.a2_cost_history.append(a3_cost)
+            self.a3_cost_history.append(a3_cost)
 
             C_a_cost = a1_cost + a2_cost + a3_cost
             self.C_a_cost_history.append(C_a_cost)
@@ -233,7 +237,23 @@ class glob_vars:
 
         # print(f'R_rev: {R_rev}, a_1: {a1_cost}, a_2: {a2_cost}, a3: {a3_cost}, C_a {C_a_cost}, C_n_i {C_n_i_cost}, {self.new_infected_history}')
 
+    def restore_parameters(self, par):
+        cwd = os.getcwd()
+        if cwd.split('/')[-1] != 'model': cwd += '/model'
+        cwd += '/output'
 
+        cwd += f'/{str(par.restore_parameters_path)}/parameters.json'
+
+        if os.path.exists(cwd):
+            
+            par_dict = self.jsonLoader(cwd)
+
+            for key, value in par_dict.items():
+                setattr(par, key, value)
+                    
+        else: print('Error! par.restore_parameters_path -> path does not exist')
+
+        
 
 class agents_list:
     def __init__(self):

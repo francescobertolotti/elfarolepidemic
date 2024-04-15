@@ -91,3 +91,11 @@ class parameters:
 
         # Settings
         self.draw_conclusions = True
+        self.save_conclusions = True
+        self.csv_conclusions = True
+        self.duplicate_q_table = True
+        self.save_parameters = True
+        self.save_current_q_table = True
+
+        self.restore_parameters = False
+        self.restore_parameters_path = '3'

@@ -57,6 +57,8 @@ class PM:
     # Legacy (No PM, Mode 1)
 
     def a1Init_capacityReductionInit(self, par, gv):
+        gv.a1_is_active_history.append(0)
+
         proceed = False
         if not par.enableRL or (par.enableRL and par.RL_mode == 1):
             if (gv.infected_attendance >= (par.a1_InfectedTreshold * par.n_persons)):
@@ -77,6 +79,7 @@ class PM:
             return False
     
     def a1Init_capacityReductionEnd(self, par, gv):
+        gv.a1_is_active_history.append(1)
 
         proceed = False
         if not par.enableRL or (par.enableRL and par.RL_mode == 1):
@@ -101,7 +104,7 @@ class PM:
 
     
     def a2Init_faceMaskInit(self, par, gv):
-
+        gv.a2_is_active_history.append(0)
 
         proceed = False
         if not par.enableRL or (par.enableRL and par.RL_mode == 1):
@@ -123,6 +126,7 @@ class PM:
     def a2Init_faceMaskEnd(self, par, gv):
         gv.a2History_x.append(gv.t)
         gv.a2History_y.append(- (par.n_persons * 0.05))
+        gv.a2_is_active_history.append(1)
 
         proceed = False
         if not par.enableRL or (par.enableRL and par.RL_mode == 1):
@@ -143,6 +147,7 @@ class PM:
 
 
     def a3Init_entranceTestInit(self, par, gv):
+        gv.a3_is_active_history.append(0)
 
         proceed = False
         if not par.enableRL or (par.enableRL and par.RL_mode == 1):
@@ -164,6 +169,7 @@ class PM:
     def a3Init_entranceTestEnd(self, par, gv):
         gv.a3History_x.append(gv.t)
         gv.a3History_y.append(- (par.n_persons * 0.1))
+        gv.a3_is_active_history.append(1)
 
         proceed = False
         if not par.enableRL or (par.enableRL and par.RL_mode == 1):
@@ -214,6 +220,7 @@ class PM:
         gv.q_table[state][action] = gv.q_table[state][action] + (par.alpha_RL * reward)
 
     # RL Mode 2
+        
 
     def general_init(self, gv):
         self.PM_interactionCounter += 1
@@ -259,14 +266,25 @@ class PM:
             self.update_RL_q_table_mode2(par, gv)
 
     def general_for_day(self, par, gv):
-
+        
+        if gv.a1_is_active:
+            gv.a1_is_active_history.append(1)
+        else:
+            gv.a1_is_active_history.append(0)
+        
         if gv.a2_is_active:
             gv.a2History_x.append(gv.t)
             gv.a2History_y.append(- (par.n_persons * 0.05))
+            gv.a2_is_active_history.append(1)
+        else:
+            gv.a2_is_active_history.append(0)
 
         if gv.a3_is_active:
             gv.a3History_x.append(gv.t)
             gv.a3History_y.append(- (par.n_persons * 0.1))
+            gv.a3_is_active_history.append(1)
+        else:
+            gv.a3_is_active_history.append(0)
 
     def update_RL_q_table_mode2(self, par, gv):
         action = self.current_RL_data['action']

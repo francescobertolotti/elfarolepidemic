@@ -4,7 +4,7 @@ import random
 def go(par, gv, al, pm):
     
     gv.t += 1
-
+    gv.t_history.append(gv.t)
 
     random.shuffle(gv.present_agents)
 

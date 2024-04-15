@@ -26,10 +26,9 @@ class model():
         self.al = agents_list()
         self.par = parameters()
         self.gv = glob_vars(self.par)
+        if self.par.restore_parameters:
+            self.gv.restore_parameters(par=self.par)
         self.pm = PM(self.par)
-
-
-
 
 
     def run(self, my_seed):
@@ -43,11 +42,23 @@ class model():
 
         # Running model
         for _ in range(self.par.max_days): go(self.par, self.gv, self.al, self.pm)
-        if self.par.draw_conclusions: conclusions().Chart(par=self.par, gv=self.gv)
+
+        
+        c = conclusions(self.par)
+        if self.par.draw_conclusions or self.par.save_conclusions:
+            c.Chart(par=self.par, gv=self.gv)
+            c.Chart_cost(par=self.par, gv=self.gv)
+        if self.par.csv_conclusions:
+            c.CSV_data(par=self.par, gv=self.gv)
+        if self.par.save_parameters:
+            c.save_parameters(par=self.par)
+        
         
 
         # Saving q-table
-        self.gv.save_q_table(self.par, precedent_id=json_table_id)
+        if self.par.enableRL and self.par.enablePM:
+            self.gv.save_q_table(self.par, precedent_id=json_table_id)
+            if self.par.save_current_q_table: c.save_current_q_table(gv=self.gv)
             
         return self.gv
     
