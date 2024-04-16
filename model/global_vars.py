@@ -30,6 +30,7 @@ class glob_vars:
         self.new_infected_history = []
         self.recovered_agents_history = []
 
+        self.txt_output = ''
         
 
 
@@ -53,8 +54,11 @@ class glob_vars:
 
         self.export_q_table = {}
 
-        # Value
+        self.action_on_random = []
+        self.action_on_random_zero = []
+        self.action_on_max = []
 
+        # Value
         self.a1_cost_history = []
         self.a2_cost_history = []
         self.a3_cost_history = []
@@ -66,6 +70,9 @@ class glob_vars:
 
         self.R_revenues_history = []
         
+        # Epoch
+        self.epoch_id = 0
+        self.is_epoch = False
 
     def compute_globals(self, al, par):
 
@@ -155,7 +162,7 @@ class glob_vars:
         if os.path.exists(name):
             #try:
             with open(name, 'w') as file:
-                json.dump(content, file)
+                json.dump(content, file, indent=4)
             #except Exception:
                 #print("Unable to write %s file, unexpected error." % name)
         else:

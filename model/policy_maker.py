@@ -195,25 +195,8 @@ class PM:
         state = self.current_RL_data['state']
         action = self.current_RL_data['action']
         
-        if action == 0:
-            cost_u = par.a1_cost
-            revenues_u = par.a1_reduction_revenues
-        if action == 1:
-            #utlità = alpha * costo_economico + (beta * numero_contagiati)
-            cost_u = par.a2_cost
-            revenues_u = par.a2_reduction_revenues
-        if action == 2:
-            cost_u = par.a3_cost
-            revenues_u = par.a3_reduction_revenues
-        
-
-        n_i_h = gv.new_infected_history
-        r_a_h = gv.recovered_agents_history
-        n_i_h_c = sum(n_i_h[self.current_RL_data['start_date'] : (gv.t - 1)])
-        r_a_h_c = sum(r_a_h[self.current_RL_data['start_date'] : (gv.t - 1)])
-        
-        revenues = r_a_h_c * revenues_u
-        costs = n_i_h_c * cost_u 
+        revenues = sum(gv.R_revenues_history[self.current_RL_data['start_date'] : (gv.t - 1)])
+        costs = sum(gv.C_cost_history[self.current_RL_data['start_date'] : (gv.t - 1)])
 
         reward = revenues - costs
         
@@ -291,31 +274,16 @@ class PM:
         state = self.current_RL_data['state']
         dict_actions = self.current_RL_data['dict_action']
 
-        cost_u = 0
-        revenues_u = 0
-        if dict_actions[0] == 1:
-            cost_u += par.a1_cost
-            revenues_u += par.a1_reduction_revenues
-        if dict_actions[1] == 1:
-            #utlità = alpha * costo_economico + (beta * numero_contagiati)
-            cost_u += par.a2_cost
-            revenues_u += par.a2_reduction_revenues
-        if dict_actions[2] == 1:
-            cost_u += par.a3_cost
-            revenues_u += par.a3_reduction_revenues
+        revenues = sum(gv.R_revenues_history[self.current_RL_data['start_date'] : (gv.t - 1)])
+        costs = sum(gv.C_cost_history[self.current_RL_data['start_date'] : (gv.t - 1)])
 
-        n_i_h = gv.new_infected_history
-        r_a_h = gv.recovered_agents_history
-        n_i_h_c = sum(n_i_h[self.current_RL_data['start_date'] : (gv.t - 1)])
-        r_a_h_c = sum(r_a_h[self.current_RL_data['start_date'] : (gv.t - 1)])
-        
-        revenues = r_a_h_c * revenues_u
-        costs = n_i_h_c * cost_u 
+        #if action == 0: print(sum(gv.C_n_i_cost_history[self.current_RL_data['start_date'] : (gv.t - 1)]))
 
-        reward = revenues - costs
+        reward = revenues - costs        
 
-        gv.q_table[state][action] = gv.q_table[state][action] + (par.alpha_RL * reward)
-
+        gv.q_table[state][action] = (gv.q_table[state][action] * (1 - par.alpha_RL)) + (par.alpha_RL * reward)
+        #print(gv.t, gv.q_table[state][action], state, action, gv.q_table[state])
+        #print('\n\n')
 
     def operationForDay(self, par, gv):
         
@@ -371,14 +339,33 @@ class PM:
                 
                 q_table_i = gv.q_table[state]
 
+                gv.txt_output += f'\n\n - PM RL Mode 1'
+
                 if np.max(q_table_i) == 0:
                     action = random.choice(self.aviable_strategies)
+
+                    gv.txt_output += f'\n  - Action on random zero: {action}, State {state}, Aviable {self.aviable_strategies}, q-table: {q_table_i}'
+
+                    gv.action_on_max.append(0)
+                    gv.action_on_random_zero.append(1)
+                    gv.action_on_random.append(0)
                 else:
                     if random.random() >= par.epsilon_RL:
                         action = random.choice(self.aviable_strategies)
+
+                        gv.txt_output += f'\n  - Action on random: {action}, State {state}, Aviable {self.aviable_strategies}, q-table: {q_table_i}'
+
+                        gv.action_on_max.append(0)
+                        gv.action_on_random_zero.append(0)
+                        gv.action_on_random.append(1)
                     else:    
                         action = np.argmax(q_table_i)
-                
+
+                        gv.txt_output += f'\n  - Action on max: {action}, State {state}, Aviable {self.aviable_strategies}, q-table: {q_table_i}'
+
+                        gv.action_on_max.append(1)
+                        gv.action_on_random_zero.append(0)
+                        gv.action_on_random.append(0)
 
                 if action == 0:
                     self.a1Init_capacityReductionInit(par, gv)
@@ -394,14 +381,22 @@ class PM:
                     'state': state,
                     'action': action,
                 }
+
+                gv.txt_output += f'\n  - Current RL data: {self.current_RL_data}'
             
+            else:
+                gv.action_on_max.append(0)
+                gv.action_on_random_zero.append(0)
+                gv.action_on_random.append(0)
                 
         else:
             
-            self.general_for_day(par, gv)
+            
             
             if "aEndCheck" in self.operationsArr:
                 self.aEnd_mode2(par, gv)
+            
+            self.general_for_day(par, gv)
 
             if "aInitCheck" in self.operationsArr and gv.infected_attendance > 0 and gv.t > par.RL_PM_t_min:
                     
@@ -450,23 +445,49 @@ class PM:
 
                 q_table_i = gv.q_table[state]
 
+                gv.txt_output += f'\n - PM RL Mode 2'
+
                 if np.max(q_table_i) == 0:
-                    action = random.choice(list(current_dict.keys()))
-                    # print('Action on random zero: ', action)
+
+                    
+                    action_table_zero = []
+                    for i, el in enumerate(q_table_i):
+                        if el == 0 and i in current_dict.keys():
+                            action_table_zero.append(i)
+                    
+                    if len(action_table_zero) == 0:
+                        action_table_zero = list(current_dict.keys())
+                   
+                    action = random.choice(action_table_zero)
+                    
+                    
+                    gv.txt_output += f'\n  - Action on random zero: {action}, State {state}, Aviable {action_table_zero}, q-table: {gv.q_table[state]}'
+                    
+                    gv.action_on_max.append(0)
+                    gv.action_on_random_zero.append(1)
+                    gv.action_on_random.append(0)
                 else:
                     if random.random() >= par.epsilon_RL:
                         action = random.choice(list(current_dict.keys()))
-                        # print('Action on random: ', action)
+                        
+                        gv.txt_output += f'\n  - Action on random: {action}, State {state}, Aviable {current_dict.keys()}, q-table: {gv.q_table[state]}'
+
+                        gv.action_on_max.append(0)
+                        gv.action_on_random_zero.append(0)
+                        gv.action_on_random.append(1)
                     else:    
                         action = 0
-                        current_max = 0
+                        current_max = -10000000000000000000000
                         for i, el in enumerate(q_table_i):
-                            
                             if i in current_dict.keys() and el > current_max:
-                                current_max = el
+                                current_max = el    
                                 action = i
-                        # print('Action on max: ', action)
 
+                        gv.action_on_max.append(1)
+                        gv.action_on_random_zero.append(0)
+                        gv.action_on_random.append(0)
+                        gv.txt_output += f'\n  - Action on random: {action}, State {state}, Aviable {current_dict.keys()}, current max: {current_max}, q-table: {gv.q_table[state]}'
+                        
                 
                 
 
@@ -477,8 +498,8 @@ class PM:
                 if current_dict[action][2] == 1:
                     self.a3Init_mode2(par, gv)
 
-                if current_dict[action][0] != 0 or current_dict[action][1] != 0 or current_dict[action][2] != 0:
-                    self.general_init(gv)
+                
+                self.general_init(gv)
 
                 self.current_RL_data = {
                     'start_date': (gv.t - 1),
@@ -486,5 +507,12 @@ class PM:
                     'action': action,
                     'dict_action': current_dict[action]
                 }
+
+                gv.txt_output += f'\n  - Current RL data: {self.current_RL_data}'
+            
+            else:
+                gv.action_on_max.append(0)
+                gv.action_on_random_zero.append(0)
+                gv.action_on_random.append(0)
 
                 

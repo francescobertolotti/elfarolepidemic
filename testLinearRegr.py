@@ -36,22 +36,11 @@ def regLine(arr_y, next_val = "", arr_x = ""):
 regression_line, arr_x_n = regLine(arr_y)
 
 
-def regLineP(arr_y, next_val = "", arr_x = ""):
-    if arr_x == "":
-        arr_x = np.arange(1, len(arr_y) + 1)
-    if next_val == "":
-        arr_x_n = np.arange(1, len(arr_y) + 2)
-    else:
-        arr_x_n = np.arange(1, next_val + 1)
 
-    coefficients = np.polyfit(arr_x, arr_y, 1)
-    regression_line = np.poly1d(coefficients)
-    res_arr = regression_line(arr_x_n)
-    
-    return res_arr, arr_x_n
 
-res_1 = str(regLine(arr_x=arr_x, arr_y=arr_y))
-res_2 = str(regLineP(arr_x=arr_x, arr_y=arr_y))
+import random
 
-print(res_2 == res_1)
 
+for i in range(0,100):
+    arr_plus_minus = [-1, 1]
+    print(random.random()*0.5 * arr_plus_minus[random.randint(0, 1)])

@@ -4,6 +4,7 @@ import random
 def go(par, gv, al, pm):
     
     gv.t += 1
+    gv.txt_output += f'\n\n\n------- Day {gv.t}/{par.max_days} -----------------------------------------------------------------------------'
     gv.t_history.append(gv.t)
 
     random.shuffle(gv.present_agents)

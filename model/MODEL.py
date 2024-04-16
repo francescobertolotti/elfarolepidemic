@@ -15,7 +15,7 @@ from model.policy_maker import *
 
 
 class model():
-    def __init__(self, my_seed):
+    def __init__(self, my_seed, is_epoch: bool = False):
         
         random.seed(my_seed)
         np.random.seed(seed=my_seed)
@@ -28,8 +28,10 @@ class model():
         self.gv = glob_vars(self.par)
         if self.par.restore_parameters:
             self.gv.restore_parameters(par=self.par)
+        self.gv.is_epoch = is_epoch
+        
         self.pm = PM(self.par)
-
+        
 
     def run(self, my_seed):
     
@@ -44,21 +46,22 @@ class model():
         for _ in range(self.par.max_days): go(self.par, self.gv, self.al, self.pm)
 
         
-        c = conclusions(self.par)
-        if self.par.draw_conclusions or self.par.save_conclusions:
-            c.Chart(par=self.par, gv=self.gv)
-            c.Chart_cost(par=self.par, gv=self.gv)
-        if self.par.csv_conclusions:
-            c.CSV_data(par=self.par, gv=self.gv)
-        if self.par.save_parameters:
-            c.save_parameters(par=self.par)
+        self.cl = conclusions(self.par, self.gv)
+
         
+        if self.par.draw_conclusions or self.par.save_conclusions:
+            self.cl.Chart(par=self.par, gv=self.gv)
+            self.cl.Chart_cost(par=self.par, gv=self.gv)
+        if self.par.save_conclusions:
+            self.cl.CSV_data(par=self.par, gv=self.gv)
+            self.cl.save_parameters(par=self.par)
+            self.cl.save_txt_output(gv=self.gv)
         
 
         # Saving q-table
         if self.par.enableRL and self.par.enablePM:
             self.gv.save_q_table(self.par, precedent_id=json_table_id)
-            if self.par.save_current_q_table: c.save_current_q_table(gv=self.gv)
+            if self.par.save_duplicate_q_table and self.par.save_conclusions: self.cl.save_current_q_table(gv=self.gv)
             
         return self.gv
     

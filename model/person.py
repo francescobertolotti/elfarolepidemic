@@ -177,9 +177,13 @@ class Person:
 
             # if self.who == 1: print(self.infectionLevelsArr[t - 1], gv.t)
             x = self.infectionLevelsArr[t - 1]
-            self.levelContagious = x
-
-            return x
+            arr_plus_minus = [-1, 1]
+            self.levelContagious = x + (random.random() * par.infection_randomness * arr_plus_minus[random.randint(0, 1)])
+            
+            if self.levelContagious < 0:
+                self.levelContagious = 0
+            
+            return self.levelContagious
             
         elif self.ContagiousWillStopAt - (current_day - 1) == 0 and gv.t != 1:
             
