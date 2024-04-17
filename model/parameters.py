@@ -4,13 +4,13 @@ class parameters:
     def __init__(self):
 
         # Simulation parameters
-        self.max_days = 100
-        self.n_persons = 2000
+        self.max_days = 100 # Number of days for each simulation
+        self.n_persons = 2000 # Represents the number of people for each simulation.
 
         # Social parameters
         self.capacity = 1500 # This integer represent the maximum capacity of the bar (is userfull if respect_the_max: bool = True)
         self.threshold = 0.5 # This threshold is used to determine if an agent will go to the bar or not depending on his strategy
-        self.respect_the_max = True # This boolean rapresent if the bar capacity will be respected or not
+        self.respect_the_max = True # This boolean represent if the bar capacity will be respected or not
 
         # Agent strategies
         self.strategyOne = 0.1 # StrategyOne: Random strategy
@@ -30,7 +30,6 @@ class parameters:
         self.people_memory_weight_arr = [0.5, 0.2, 0.1] # This is the weight agents give to each single event
         self.alpha = 0.2 # This is the weight to the new infected agents
         self.regression_type = 1 # Indicates the regression line degree for np.polyfit function (1 = Linear regression)
-        self.infection_cost = 1
         self.infection_randomness = 0.15 # this treshold changes the level contagius by a value rangin from -self.infection_randomness to self.infection_randomness
 
 
@@ -42,10 +41,10 @@ class parameters:
 
         self.delta = 150 # The cost that new infections have
 
-        self.r = 0 # Revenue for each recovered agent
+        self.r = 50 # Revenue for each recovered agent
 
         # PM a1
-        self.a1_reductionPerc = 0.45
+        self.a1_reductionPerc = 0.6
         self.a1_reductionDuration = 10
         self.a1_InfectedTreshold = 0.375 # Percentage of infected above to activate strategy a1 for PM, calculated on self.n_persons
         self.a1_cost = 2
@@ -67,7 +66,7 @@ class parameters:
         self.a3_testFailUnder = 0.45 # Nei casi in cui fa dovrebbe funzuionare comunque sbaglia e fa entrare
         self.a3_reductionDuration = 1
         self.a3_InfectedTreshold = 0.2
-        self.a3_cost = 50000
+        self.a3_cost = 200000
         self.a3_reduction_revenues = 1
 
         # PM Reinforcement leaning
@@ -79,7 +78,7 @@ class parameters:
         self.epsilon_RL = 0.2
         self.alpha_RL = 0.3
 
-        self.RL_PM_t_min = 7
+        self.RL_PM_t_min = 15
 
         self.infection_slope_regr_len = 5
         

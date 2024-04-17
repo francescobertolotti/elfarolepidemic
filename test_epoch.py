@@ -71,7 +71,6 @@ for i in range(0, runs):
 
     
     if i < int(runs * 0.625): epsilon_RL += (1 - starting_epsilon_RL) / int(runs * 0.625)
-    mod.par.RL_PM_t_min = 0
     mod.par.epsilon_RL = epsilon_RL
 
     

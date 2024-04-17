@@ -1,0 +1,115 @@
+% !TeX spellcheck = it
+
+\documentclass{article}
+
+\usepackage{makeidx}
+\usepackage{natbib}
+\usepackage{amsthm}
+\usepackage{mathtools}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[italian]{babel}
+\usepackage[a4paper, total={6in, 8in}]{geometry}
+\usepackage{parallel,enumitem}
+
+
+\makeindex
+\title{Analisi sensitività}
+\author{Niccolò Kadera}
+\date{\today}
+\newtheorem{example}{Esempio}
+
+
+\begin{document}
+{\fontfamily{lmss}\selectfont
+\maketitle
+
+\section{Intro}
+In questa analisi verranno studiati i seguenti paramteri del modello:
+
+\begin{itemize}
+    \item \textbf{$\delta$ (delta):} 
+    \item \textbf{$t_{a} $ (a\_reductionDuration):} 
+    \item \textbf{$r_{a1}$ (a1\_reductionPerc):} 
+    \item \textbf{$c_{a2}$ (a2\_cost):} 
+    \item \textbf{$c_{a3}$ (a3\_cost):} Valore di \newline
+\end{itemize}
+
+Altri parametri significativi del modello sono: \newline
+
+    
+    \textbf{Parametri della simulazione}
+    \begin{itemize}
+        \item \textbf{$T$ (max\_days):} [100] Numero di giorni per ogni simulazione.
+        \item \textbf{$n$ (n\_persons):} [2000] Rappresenta il numero di persone per ogni simulazione.\newline
+    \end{itemize}
+
+    \textbf{Parametri sociali}
+    \begin{itemize}
+        \item \textbf{$b_{c}$ (capacity):} [1500] Questo numero intero rappresenta la capacità massima della barra (è u utile se respect\_the\_max: bool = True).
+        \item \textbf{$t_a$ (threshold): } [0.5] Questa soglia viene utilizzata per determinare se un agente andrà al bar o meno a seconda della sua strategia.
+        \item \textbf{respect\_the\_max: } [True] Questo booleano rappresenta se la capacità della barra sarà rispettata o meno..\newline
+    \end{itemize}
+
+    \textbf{Strategie degli agenti}
+    \begin{itemize}
+        \item \textbf{strategyOne:} [0.1] Percentuale sul totale degli agenti che seguiranno la strategia uno per l'ottenimento della prima decisone riguardo alla presenza al bar. La prima strategia è totalmente randomica.
+        \item \textbf{strategyTwo: } [1 - strategyOne = 0.9] Percentuale sul totale degli agenti che seguiranno la strategia due per l'ottenimento della prima decisone riguardo alla presenza al bar. La seconda strategia è calcolata parzialmente con una regressione lineare del vettore memoria contenente le precedenti strategie degli agenti.
+        \item \textbf{useRegrFrom: } [10] Indica il giorno dal quale gli agenti che seguono la strategia due potranno utilizzare una regressione lineare, in quanto il vettore memoria sarà sufficientemente popolato.
+        \item \textbf{useRegrFor: } [1] Dell'output totale della strategia definita dall'agente ogni settimana, il valore definito dalla regressione lineare delle precedenti influisce su una percentuale definita dal parametro.\newline
+    \end{itemize}
+
+   
+
+    
+    
+    
+    \textbf{Parametri epidemiologici}
+    \begin{itemize}
+        \item \textbf{num\_infected\_persons:} [100] Identifica il numero di persone contagiose ad inizio simulazione.
+        \item \textbf{$t_{c}$ (infection\_threshold):} [0.4] Un'altro agente diventa contagioso se il suo livello contagio $c_{j}$ è maggiore del contagious\_threshold. Quindi se un agente ha un livello di contagio inferiore a $t_{c}$ non potrà più infettare altri agenti.
+        \item \textbf{$t_{s}$ (infection\_thresholdNotPresent):} [0.8] Per cui se un agente ha un livello di contagio $c_{j}$ maggiore di $t_{s}$ allora, indipendentemente dal valore di della stategia, non si presenterà al bar in quanto i sintomi dell'infezione sono troppo elevati.
+        \item \textbf{$t_{i}$ (infection\_duration):} [10] Identifica la durata in giorni dell'infezione, senza
+        \item \textbf{$t_{r}$ (infection\_cantStartUntil):} [2] Dopo che un agente guarisce da un infezione, il valore identifica quanto tempo un agente è immune ad una nuova infezione.
+        \item \textbf{infection\_generatesResistance:} [True] Abilita il valore precedente, per l'agente deve attendere $t_{r}$ giorni, dopo essere guarito, per essere infettato nuovamente
+        \item \textbf{people\_memory\_weight\_arr:} [[0.5, 0.2, 0.1]] Pesi relativi assegnati alla memoria delle precedenti strategie salvate nel vettore memoria. In questo caso, l'ultimo valore inciderà per un 50\% sul valore finale della strategia, il penultimo 20\%, il terzultimo 10\% ed il rimanente 20\% verrà ripartito tra tutti gli altri valori presenti nel vettore memoria.
+        \item \textbf{$\alpha$ (alpha):} [0.2] Peso che varia il numero di nuovi infetti per agente.
+        \item \textbf{regression\_type:} [1] Grado della regressione effettuata con np.polyfit (1 = regressione lineare).
+        \item \textbf{infection\_randomness:} [0.15] Altera il livello di contagio per un valore randomico che spazia tra -infection\_randomness e +infection\_randomness.\newline
+    \end{itemize}
+    
+    \textbf{Parametri del Policy Maker}
+    \begin{itemize}
+        \item \textbf{enablePM:} [True] Abilita il Policy Maker nella simulazione.
+        \item \textbf{enableA1 :} [True] Abilita la strategia A1 del PM. Ovvero l'azione per cui viene ridotta la capacità massima del bar.
+        \item \textbf{enableA2 :} [True] Abilita la strategia A2 del PM. Ovvero l'azione per cui viene imposto l'utilizzo di mascherine all'interno del bar.
+        \item \textbf{enableA3 :} [True] Abilita la strategia A3 del PM. Ovvero l'azione per cui viene effettuato un test sul livello di contagio all'entrata del bar.
+        \item \textbf{$\delta$ (delta):} [150] Costo per ogni nuovo infetto
+        \item \textbf{$r_{i}$ (delta):} [?] Ricavo per ogni agente, viene utilizzato in realzione al numero dei guariti ad ogni istante di tempo.
+        \item \textbf{ :} 
+    \end{itemize}
+
+    \textbf{Parametri Azione 1}
+    \begin{itemize}
+        \item \textbf{$r_{a1}$ (a1\_reductionPerc):} 
+        \item \textbf{ :} 
+    \end{itemize}
+
+\section{Parametri default}
+Nel modello default i parametri utilizzati sono 
+
+\section{ABM}
+
+
+
+
+
+\printindex
+
+\bibliographystyle{plain}
+\bibliography{mybib.bib}
+
+}
+\end{document}
