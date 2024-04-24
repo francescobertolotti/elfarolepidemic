@@ -274,6 +274,8 @@ class Person:
                             elif ag_to_infect.facemaskType == 0: real_treshold = par.infection_threshold    
                         else:
                             real_treshold = par.infection_threshold
+
+                        # if self.who >= 1 or self.who <= 30: print(ag_to_infect.facemaskType, infected_agent.levelContagious, real_treshold, self.who)
                         
                         if infected_agent.levelContagious >= real_treshold:
                             present_agents_susceptible_infectable.remove(ag_to_infect)

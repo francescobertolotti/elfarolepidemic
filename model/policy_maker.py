@@ -420,7 +420,8 @@ class PM:
 
                 current_dict = PM.__RL_Full_Actions
 
-                
+                # If active
+
                 if gv.a1_is_active:
                     if 0 in current_dict.keys(): current_dict.pop(0)
                     if 2 in current_dict.keys(): current_dict.pop(2)
@@ -441,7 +442,30 @@ class PM:
                     if 2 in current_dict.keys(): current_dict.pop(2)
                     if 4 in current_dict.keys(): current_dict.pop(4)
 
+                # If active on parameters
+
+                if not par.enableA1:
+                    if 1 in current_dict.keys(): current_dict.pop(1)
+                    if 4 in current_dict.keys(): current_dict.pop(4)
+                    if 5 in current_dict.keys(): current_dict.pop(5)
+                    if 7 in current_dict.keys(): current_dict.pop(7)
+
                 
+                if not par.enableA2:
+                    if 2 in current_dict.keys(): current_dict.pop(2)
+                    if 4 in current_dict.keys(): current_dict.pop(4)
+                    if 6 in current_dict.keys(): current_dict.pop(6)
+                    if 7 in current_dict.keys(): current_dict.pop(7)
+                
+                
+                if not par.enableA3:
+                    if 3 in current_dict.keys(): current_dict.pop(3)
+                    if 5 in current_dict.keys(): current_dict.pop(5)
+                    if 6 in current_dict.keys(): current_dict.pop(6)
+                    if 7 in current_dict.keys(): current_dict.pop(7)
+
+                if par.enable_at_least_one_A:
+                    if 0 in current_dict.keys(): current_dict.pop(0)
 
                 q_table_i = gv.q_table[state]
 

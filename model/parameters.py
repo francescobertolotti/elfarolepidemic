@@ -30,7 +30,7 @@ class parameters:
         self.people_memory_weight_arr = [0.5, 0.2, 0.1] # This is the weight agents give to each single event
         self.alpha = 0.2 # This is the weight to the new infected agents
         self.regression_type = 1 # Indicates the regression line degree for np.polyfit function (1 = Linear regression)
-        self.infection_randomness = 0.15 # this treshold changes the level contagius by a value rangin from -self.infection_randomness to self.infection_randomness
+        self.infection_randomness = 0.25 # this treshold changes the level contagius by a value rangin from -self.infection_randomness to self.infection_randomness
 
 
         # PM parameters
@@ -39,35 +39,33 @@ class parameters:
         self.enableA2 = True # Enable strategy a2
         self.enableA3 = True # Enable strategy a3
 
+        self.enable_at_least_one_A = False
+
         self.delta = 150 # The cost that new infections have
 
-        self.r = 50 # Revenue for each recovered agent
+        self.r = 0 # Revenue for each recovered agent
 
         # PM a1
-        self.a1_reductionPerc = 0.6
+        self.a1_reductionPerc = 0.8
         self.a1_reductionDuration = 10
         self.a1_InfectedTreshold = 0.375 # Percentage of infected above to activate strategy a1 for PM, calculated on self.n_persons
         self.a1_cost = 2
-        self.a1_reduction_revenues = 1
 
         # PM a2
-        self.a2_faceMask1Agents = 0.5
-        self.a2_faceMask2Agents = 0.5
+        self.a2_faceMask1Agents = 0.65
+        self.a2_faceMask2Agents = 0.3
         self.a2_faceMask0Agents = 1 - self.a2_faceMask1Agents - self.a2_faceMask2Agents
-        self.a2_faceMask1Perc = 0.3
-        self.a2_faceMask2Perc = 0.4
+        self.a2_faceMask1Perc = 0.3775
+        self.a2_faceMask2Perc = 0.5
         self.a2_reductionDuration = 1
-        self.a2_InfectedTreshold = 0.01 # Percentage of infected above to activate strategy a2 for PM, calculated on self.n_persons
+        self.a2_InfectedTreshold = 0.1 # Percentage of infected above to activate strategy a2 for PM, calculated on self.n_persons
         self.a2_cost = 8
-        self.a2_reduction_revenues = 1
 
         # PM a3
-        # self.a3_ = 0 
         self.a3_testFailUnder = 0.45 # Nei casi in cui fa dovrebbe funzuionare comunque sbaglia e fa entrare
         self.a3_reductionDuration = 1
         self.a3_InfectedTreshold = 0.2
-        self.a3_cost = 200000
-        self.a3_reduction_revenues = 1
+        self.a3_cost = 40000
 
         # PM Reinforcement leaning
         self.enableRL = True
@@ -81,12 +79,6 @@ class parameters:
         self.RL_PM_t_min = 15
 
         self.infection_slope_regr_len = 5
-        
-        self.store_q_table = True
-        self.stat_from_stored_q_table = True
-        self.stored_q_table_id = 'last'
-
-        self.clear_q_table_memory = False
 
         # Settings
         self.draw_conclusions = True
@@ -95,3 +87,9 @@ class parameters:
 
         self.restore_parameters = False
         self.restore_parameters_path = '3'
+
+        self.store_q_table = True
+        self.stat_from_stored_q_table = True
+        self.stored_q_table_id = 'last'
+
+        self.clear_q_table_memory = False
