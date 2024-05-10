@@ -1,10 +1,10 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2024.2.23)  24 APR 2024 00:35
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2024.2.23)  3 MAY 2024 09:07
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
  %&-line parsing enabled.
-**"/Users/niccolokadera/Library/CloudStorage/OneDrive-UNIVERSITA'CARLOCATTANEO-LIUC/One Drive (Notability e Università)/File Office condivisi online/El Farol/Contagi V2/elfarolepidemic Live Github/Analisi sensibilità/Analisi 1/Analisi/Analisi"
-(/Users/niccolokadera/Library/CloudStorage/OneDrive-UNIVERSITA'CARLOCATTANEO-LIUC/One Drive (Notability e Università)/File Office condivisi online/El Farol/Contagi V2/elfarolepidemic Live Github/Analisi sensibilità/Analisi 1/Analisi/Analisi.tex
+**"/Users/niccolokadera/Library/CloudStorage/OneDrive-UNIVERSITA'CARLOCATTANEO-LIUC/One Drive (Notability e Università)/File Office condivisi online/El Farol/Contagi V2/elfarolepidemic Live Github/Analisi sensibilità/Analisi 1/Analisi/Analisi"
+(/Users/niccolokadera/Library/CloudStorage/OneDrive-UNIVERSITA'CARLOCATTANEO-LIUC/One Drive (Notability e Università)/File Office condivisi online/El Farol/Contagi V2/elfarolepidemic Live Github/Analisi sensibilità/Analisi 1/Analisi/Analisi.tex
 LaTeX2e <2022-11-01> patch level 1
 L3 programming layer <2023-02-22> (/usr/local/texlive/2023/texmf-dist/tex/latex/base/article.cls
 Document Class: article 2022/07/02 v1.4n Standard LaTeX document class
@@ -518,23 +518,32 @@ Underfull \hbox (badness 10000) in paragraph at lines 111--112
  []
 
 [3]
-<media/d_1_2.png, id=58, 462.528pt x 346.896pt>
+<media/d_1_2.png, id=32, 462.528pt x 346.896pt>
 File: media/d_1_2.png Graphic file (type png)
 <use media/d_1_2.png>
 Package pdftex.def Info: media/d_1_2.png  used on input line 127.
 (pdftex.def)             Requested size: 433.62pt x 325.23007pt.
  [4]
-<media/d_1_198.png, id=64, 462.528pt x 346.896pt>
+<media/d_1_198.png, id=38, 462.528pt x 346.896pt>
 File: media/d_1_198.png Graphic file (type png)
 <use media/d_1_198.png>
 Package pdftex.def Info: media/d_1_198.png  used on input line 133.
 (pdftex.def)             Requested size: 433.62pt x 325.23007pt.
-<media/d_1_infection.png, id=65, 462.528pt x 346.896pt>
+<media/d_1_infection.png, id=39, 462.528pt x 346.896pt>
 File: media/d_1_infection.png Graphic file (type png)
 <use media/d_1_infection.png>
 Package pdftex.def Info: media/d_1_infection.png  used on input line 138.
 (pdftex.def)             Requested size: 433.62pt x 325.23007pt.
  [5 <./media/d_1_2.png>] [6 <./media/d_1_198.png>]
+
+LaTeX Warning: Reference `fig:d_1_2' on page 7 undefined on input line 142.
+
+
+LaTeX Warning: Reference `fig:d_1_198' on page 7 undefined on input line 142.
+
+
+LaTeX Warning: Reference `fig:d_1_infection' on page 7 undefined on input line 143.
+
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 (hyperref)                removing `math shift' on input line 152.
@@ -559,32 +568,73 @@ Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 (hyperref)                removing `math shift' on input line 153.
 
-File: media/d_1_infection.png Graphic file (type png)
-<use media/d_1_infection.png>
-Package pdftex.def Info: media/d_1_infection.png  used on input line 155.
+<media/a3_c_40000_198.png, id=54, 462.528pt x 346.896pt>
+File: media/a3_c_40000_198.png Graphic file (type png)
+<use media/a3_c_40000_198.png>
+Package pdftex.def Info: media/a3_c_40000_198.png  used on input line 156.
 (pdftex.def)             Requested size: 433.62pt x 325.23007pt.
+
+Underfull \hbox (badness 10000) in paragraph at lines 154--159
+
+ []
+
 [7 <./media/d_1_infection.png>]
+
+LaTeX Warning: Reference `fig:a3_c_40000_198' on page 8 undefined on input line 161.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `math shift' on input line 163.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `subscript' on input line 163.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `math shift' on input line 163.
+
+<media/a3_c_50000_200.png, id=64, 462.528pt x 346.896pt>
+File: media/a3_c_50000_200.png Graphic file (type png)
+<use media/a3_c_50000_200.png>
+Package pdftex.def Info: media/a3_c_50000_200.png  used on input line 166.
+(pdftex.def)             Requested size: 433.62pt x 325.23007pt.
+
+Underfull \hbox (badness 10000) in paragraph at lines 164--169
+
+ []
+
+[8 <./media/a3_c_40000_198.png>]
 No file Analisi.ind.
-(./Analisi.bbl) [8] (./Analisi.aux)
+(./Analisi.bbl) [9 <./media/a3_c_50000_200.png>] (./Analisi.aux)
+
+LaTeX Warning: There were undefined references.
+
 
 LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
 
-Package rerunfilecheck Info: File `Analisi.out' has not changed.
-(rerunfilecheck)             Checksum: 982C1065F9DFCC50B3679F5EF7D17DB3;1349.
+
+Package rerunfilecheck Warning: File `Analisi.out' has changed.
+(rerunfilecheck)                Rerun to get outlines right
+(rerunfilecheck)                or use package `bookmark'.
+
+Package rerunfilecheck Info: Checksums for `Analisi.out':
+(rerunfilecheck)             Before: D41D8CD98F00B204E9800998ECF8427E;0
+(rerunfilecheck)             After:  C7AA144A6A31AE1DAFF9438A4AD75F11;1477.
  ) 
 Here is how much of TeX's memory you used:
- 13225 strings out of 476025
- 211507 string characters out of 5790017
+ 13236 strings out of 476025
+ 211860 string characters out of 5790017
  1861388 words of memory out of 5000000
- 33455 multiletter control sequences out of 15000+600000
+ 33461 multiletter control sequences out of 15000+600000
  537761 words of font info for 59 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 75i,6n,76p,658b,638s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 75i,7n,76p,698b,638s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/lm/lmss10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/lm/lmss12.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/lm/lmss17.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/lm/lmssbx10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/cm-super/sfbx1000.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/cm-super/sfbx1200.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/cm-super/sfbx1440.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/cm-super/sfrm1000.pfb>
-Output written on Analisi.pdf (8 pages, 367271 bytes).
+Output written on Analisi.pdf (9 pages, 482398 bytes).
 PDF statistics:
- 177 PDF objects out of 1000 (max. 8388607)
- 126 compressed objects within 2 object streams
- 20 named destinations out of 1000 (max. 500000)
- 72 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 162 PDF objects out of 1000 (max. 8388607)
+ 106 compressed objects within 2 object streams
+ 23 named destinations out of 1000 (max. 500000)
+ 26 words of extra memory for PDF output out of 10000 (max. 10000000)
 

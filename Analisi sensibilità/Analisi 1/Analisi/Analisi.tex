@@ -151,11 +151,22 @@ In questa analisi verranno studiati i seguenti paramteri del modello: $\delta$, 
 
 \subsection{Analisi $c_{a3}$}
 \subsubsection{$c_{a3} = 40000$}
+Una prima analisi effettuata è stata quella di aumentare il costo dell'azione 3, ovvero $c_{a3}$, a 40.000. Questo valore è stato scelto in quanto non molto elevato, e si è voluto studiare l'effetto che avrebbe avuto sulle azioni del PM. \newline
+\begin{figure}[H]
+    \includegraphics[width=\linewidth]{media/a3_c_40000_198.png}
+    \caption{Simulation 198 a3 cost 40.000 (/media/a3\_c\_40000\_198.png)}
+    \label{fig:a3_c_40000_198}
+\end{figure}
 
+Notiamo come a fine epoca il PM abbia attivato le azioni 1 e 3, nonostante il costo dell'azione 3 fissato a 40.000. Nella simulazione 198 (Figure\ref{fig:a3_c_40000_198}) il PM riesce al giorno 29 a fermare il contagio con la combinazione di azioni scelta, il risultato viene ritenuto accettabile considerando i 15 giorni iniziali in cui il PM non può attivare nessuna azione e la media di infetti per ogni gionro a 16,29.
 
-
-
-
+\subsubsection{$c_{a3} = 50000$}
+Viene continuato ad aumentare il costo dell'azione 3, arrivando ad un valore di 50.000. \newline
+\begin{figure}[H]
+    \includegraphics[width=\linewidth]{media/a3_c_50000_200.png}
+    \caption{Simulation 198 a3 cost 40.000 (/media/a3\_c\_50000\_200.png)}
+    \label{fig:a3_c_50000_200}
+\end{figure}
 
 \printindex
 

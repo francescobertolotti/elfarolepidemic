@@ -218,13 +218,13 @@ class conclusions:
     def epoch_CSV_data(self, epoch_dict: dict, runs: int) -> None:
         with open(f'{self.folder_location_epoch}/epoch_data.csv', mode='w') as csvfile:
             fieldnames = epoch_dict.keys()
-            writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+            writer = csv.DictWriter(csvfile, fieldnames=fieldnames, delimiter=';')
             writer.writeheader()
             rows = []
             for i in range(0, runs):
                 row_dict = {}
                 for key in epoch_dict.keys():
-                    row_dict[key] = epoch_dict[key][i]
+                    row_dict[key] = str(epoch_dict[key][i]).replace('.', ',')
                 rows.append(row_dict)
             writer.writerows(rows)
 

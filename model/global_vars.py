@@ -234,9 +234,11 @@ class glob_vars:
             C_a_cost = a1_cost + a2_cost + a3_cost
             self.C_a_cost_history.append(C_a_cost)
 
+
         C_n_i_cost = par.delta * self.new_infected_history[-1]
         self.C_n_i_cost_history.append(C_n_i_cost)
 
+        # print(f'a1: {a1_cost}, a2: {a2_cost}, a3: {a3_cost}, C_a {C_a_cost}, C_n_i {C_n_i_cost}, C{C_a_cost + C_n_i_cost}')
         self.C_cost_history.append(C_a_cost + C_n_i_cost)
 
         R_rev = self.recovered_agents * par.r

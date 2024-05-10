@@ -51,7 +51,7 @@ epoch_dict = {
     'Action cost': [],
     'New infections': [],
     'New infected cost': [],
-    'Total cost': [],
+    'Total cost': [], 
     'Total revenues': [],
     'Epoch txt': f'\n------- Epochs: {200}, Starting Epsilon: {starting_epsilon_RL} -----------------------------------------------------------------------------\n\n'
 }

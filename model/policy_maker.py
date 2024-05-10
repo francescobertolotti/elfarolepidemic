@@ -471,7 +471,13 @@ class PM:
 
                 gv.txt_output += f'\n - PM RL Mode 2'
 
-                if np.max(q_table_i) == 0:
+                q_table_real_zero = []
+                for el in current_dict.keys():
+                    if q_table_i[el] == 0:
+                        q_table_real_zero.append(el)
+
+
+                if len(q_table_real_zero) > 0:
 
                     
                     action_table_zero = []
