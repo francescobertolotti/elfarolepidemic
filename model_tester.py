@@ -3,6 +3,7 @@ from model.MODEL import model
 import numpy as np
 import warnings
 from datetime import datetime
+import matplotlib.pyplot as plt
 
 warnings.filterwarnings('ignore')
 
@@ -146,6 +147,8 @@ class mt:
 
         for i in range(0, runs):
             
+            plt.close('all')
+
             seed = np.random.randint(1000000)
             mod = model(seed, is_epoch=True)
             mod.par.draw_conclusions = False
