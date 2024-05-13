@@ -563,6 +563,7 @@ class PM:
             state = el[0]
             action = el[1]
             prev = gv.q_table[state][action]
-            gv.q_table[state][action] = (gv.q_table[state][action] * (1 - par.alpha_RL)) + (par.alpha_RL * (total_cost_sum * par.total_on_action_RL))
-            gv.txt_output += f'\n    - ({state}, {action}): {prev} -> {gv.q_table[state][action]}'
+            rel = gv.q_table[state][action] / total_cost_sum
+            gv.q_table[state][action] = (gv.q_table[state][action]) + ((total_cost_sum * par.total_on_action_RL * rel))
+            gv.txt_output += f'\n    - ({state}, {action}) (rel: {rel}): {prev} -> {gv.q_table[state][action]}'
             

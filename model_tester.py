@@ -210,6 +210,10 @@ class mt:
         for i in range(cost_1, cost_2 + 1):
             self.run_epoch_cost(i)
 
+    def run_epoch_parameter_to_change_arr(self, cost_arr):
+        for el in cost_arr:
+            self.run_epoch_cost(el)
+
     def run(self):
         
         seed = np.random.randint(1000000)
@@ -219,4 +223,4 @@ class mt:
 
 if __name__ == '__main__':
     mt = mt()
-    mt.run_epoch_parameter_to_change(7, 7)
+    mt.run_epoch_parameter_to_change_arr([0.5, 1, 1.5, 2, 3, 4])
