@@ -11,7 +11,7 @@ class mt:
     
     def __init__(self):
         
-        self.runs = 2
+        self.runs = 250
         self.starting_epsilon_RL = 0.2
 
 
@@ -219,4 +219,4 @@ class mt:
 
 if __name__ == '__main__':
     mt = mt()
-    mt.run_epoch_parameter_to_change(2, 5)
+    mt.run_epoch_parameter_to_change(7, 7)

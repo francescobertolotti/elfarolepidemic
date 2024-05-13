@@ -52,6 +52,7 @@ class PM:
 
         # RL
         self.current_RL_data = {}
+        self.states_actions_history = []
 
     
     # Legacy (No PM, Mode 1)
@@ -201,6 +202,7 @@ class PM:
         reward = revenues - costs
         
         gv.q_table[state][action] = gv.q_table[state][action] + (par.alpha_RL * reward)
+        self.states_actions_history.append([state, action])
 
     # RL Mode 2
         
@@ -277,11 +279,17 @@ class PM:
         revenues = sum(gv.R_revenues_history[self.current_RL_data['start_date'] : (gv.t - 1)])
         costs = sum(gv.C_cost_history[self.current_RL_data['start_date'] : (gv.t - 1)])
 
+        
+
         #if action == 0: print(sum(gv.C_n_i_cost_history[self.current_RL_data['start_date'] : (gv.t - 1)]))
 
-        reward = revenues - costs        
+        reward = revenues - costs
 
+        
+        prev = gv.q_table[state][action]
         gv.q_table[state][action] = (gv.q_table[state][action] * (1 - par.alpha_RL)) + (par.alpha_RL * reward)
+        self.states_actions_history.append([state, action])
+        gv.txt_output += f'\n\n  - Updating Q-Table: ({action}, {state}) (a, s)\n    Old: {prev}, Next: {gv.q_table[state][action]}, Costs: {costs}, Revenues {revenues}'
         #print(gv.t, gv.q_table[state][action], state, action, gv.q_table[state])
         #print('\n\n')
 
@@ -516,7 +524,7 @@ class PM:
                         gv.action_on_max.append(1)
                         gv.action_on_random_zero.append(0)
                         gv.action_on_random.append(0)
-                        gv.txt_output += f'\n  - Action on random: {action}, State {state}, Aviable {current_dict.keys()}, current max: {current_max}, q-table: {gv.q_table[state]}'
+                        gv.txt_output += f'\n  - Action on max: {action}, State {state}, Aviable {current_dict.keys()}, current max: {current_max}, q-table: {gv.q_table[state]}'
                         
                 
                 
@@ -546,3 +554,15 @@ class PM:
                 gv.action_on_random.append(0)
 
                 
+    def update_qTable_on_totals(self, par, gv):
+        
+        total_cost_sum = -1 * sum(gv.C_cost_history)
+        gv.txt_output += f'\n\n  - Q-Table totals update (Total cost sum: {total_cost_sum}):'
+
+        for el in self.states_actions_history:
+            state = el[0]
+            action = el[1]
+            prev = gv.q_table[state][action]
+            gv.q_table[state][action] = (gv.q_table[state][action] * (1 - par.alpha_RL)) + (par.alpha_RL * (total_cost_sum * par.total_on_action_RL))
+            gv.txt_output += f'\n    - ({state}, {action}): {prev} -> {gv.q_table[state][action]}'
+            
