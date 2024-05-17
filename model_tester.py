@@ -155,7 +155,7 @@ class mt:
             mod.par.save_conclusions = True
             
             # Parameter to edit
-            mod.par.a2_cost = cost
+            mod.par.a3_cost = cost
 
 
             if i == 0:
@@ -223,4 +223,4 @@ class mt:
 
 if __name__ == '__main__':
     mt = mt()
-    mt.run_epoch_parameter_to_change_arr([0.5, 1, 1.5, 2, 3, 4])
+    mt.run_epoch_parameter_to_change_arr([30000, 40000, 50000, 60000, 80000])

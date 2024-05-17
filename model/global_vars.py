@@ -47,10 +47,11 @@ class glob_vars:
         self.a3_is_active = False
         self.a3_is_active_history = []
         self.a3_cost_is_relevant = True
+        self.a3_used_at_least_once = False
 
         # Q - Learning
         if par.RL_mode == 1: self.q_table = np.zeros([12, 3])
-        else: self.q_table = np.zeros([12, 8])
+        else: self.q_table = np.zeros([12, 12])
 
         self.export_q_table = {}
 

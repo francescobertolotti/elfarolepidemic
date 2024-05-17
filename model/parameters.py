@@ -59,7 +59,7 @@ class parameters:
         self.a2_faceMask2Perc = 0.5
         self.a2_reductionDuration = 1
         self.a2_InfectedTreshold = 0.1 # Percentage of infected above to activate strategy a2 for PM, calculated on self.n_persons
-        self.a2_cost = 15
+        self.a2_cost = 1
 
         # PM a3
         self.a3_testFailUnder = 0.45 # Nei casi in cui fa dovrebbe funzuionare comunque sbaglia e fa entrare

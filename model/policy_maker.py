@@ -13,6 +13,12 @@ class PM:
         5: (1, 0, 1),
         6: (0, 1, 1),
         7: (1, 1, 1),
+
+        # With already used action 3
+        8: (0, 0, 1),
+        9: (1, 0, 1),
+        10: (0, 1, 1),
+        11: (1, 1, 1),
     }
 
     def __init__(self, par) -> None:
@@ -229,6 +235,7 @@ class PM:
 
     def a3Init_mode2(self, par, gv):
         gv.a3_is_active = True
+        gv.a3_used_at_least_once = True
 
     def aEnd_mode2(self, par, gv):
         
@@ -425,8 +432,13 @@ class PM:
                 elif slope < 0: slope_t = 2
                 
                 state = quart_st + slope_t
-
-                current_dict = PM.__RL_Full_Actions
+                
+                # Compile currenti dict
+                current_dict = {}
+                for el in PM.__RL_Full_Actions.keys():
+                    current_dict[el] = PM.__RL_Full_Actions[el]
+                
+                # print(f'Pre: {current_dict.keys()}', PM.__RL_Full_Actions.keys())
 
                 # If active
 
@@ -451,7 +463,7 @@ class PM:
                     if 4 in current_dict.keys(): current_dict.pop(4)
 
                 # If active on parameters
-
+                
                 if not par.enableA1:
                     if 1 in current_dict.keys(): current_dict.pop(1)
                     if 4 in current_dict.keys(): current_dict.pop(4)
@@ -467,17 +479,42 @@ class PM:
                 
                 
                 if not par.enableA3:
+                    # print(f'Not enable A3')
                     if 3 in current_dict.keys(): current_dict.pop(3)
                     if 5 in current_dict.keys(): current_dict.pop(5)
                     if 6 in current_dict.keys(): current_dict.pop(6)
                     if 7 in current_dict.keys(): current_dict.pop(7)
+                    if 8 in current_dict.keys(): current_dict.pop(8)
+                    if 9 in current_dict.keys(): current_dict.pop(9)
+                    if 10 in current_dict.keys(): current_dict.pop(10)
+                    if 11 in current_dict.keys(): current_dict.pop(11)
 
+
+                # If a3 already used save values in (8-10)
+                
+                if gv.a3_used_at_least_once:
+                    # print(f'Tolgo 3-7 {gv.a3_used_at_least_once}')
+                    if 3 in current_dict.keys(): current_dict.pop(3)
+                    if 5 in current_dict.keys(): current_dict.pop(5)
+                    if 6 in current_dict.keys(): current_dict.pop(6)
+                    if 7 in current_dict.keys(): current_dict.pop(7)
+                
+                if not gv.a3_used_at_least_once:
+                    # print(f'Tolgo 9-11 {gv.a3_used_at_least_once}')
+                    if 8 in current_dict.keys(): current_dict.pop(8)
+                    if 9 in current_dict.keys(): current_dict.pop(9)
+                    if 10 in current_dict.keys(): current_dict.pop(10)
+                    if 11 in current_dict.keys(): current_dict.pop(11)
+                
+                
                 if par.enable_at_least_one_A:
                     if 0 in current_dict.keys(): current_dict.pop(0)
 
                 q_table_i = gv.q_table[state]
 
                 gv.txt_output += f'\n - PM RL Mode 2'
+
+                # print(f'End: {current_dict.keys()}')
 
                 q_table_real_zero = []
                 for el in current_dict.keys():
@@ -563,7 +600,7 @@ class PM:
             state = el[0]
             action = el[1]
             prev = gv.q_table[state][action]
-            rel = gv.q_table[state][action] / total_cost_sum
+            rel = 1
             gv.q_table[state][action] = (gv.q_table[state][action]) + ((total_cost_sum * par.total_on_action_RL * rel))
             gv.txt_output += f'\n    - ({state}, {action}) (rel: {rel}): {prev} -> {gv.q_table[state][action]}'
             
