@@ -593,7 +593,8 @@ class PM:
                 
     def update_qTable_on_totals(self, par, gv):
         
-        total_cost_sum = -1 * sum(gv.C_cost_history)
+        total_cost_sum = -1 * sum(gv.C_a_cost_history)
+        
         gv.txt_output += f'\n\n  - Q-Table totals update (Total cost sum: {total_cost_sum}):'
 
         for el in self.states_actions_history:
