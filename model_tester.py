@@ -223,4 +223,4 @@ class mt:
 
 if __name__ == '__main__':
     mt = mt()
-    mt.run_epoch_parameter_to_change_arr([0.5, 0.75, 1, 2, 3, 4, 5, 6])
+    mt.run_epoch_parameter_to_change_arr([2, 3, 4, 5, 6])
