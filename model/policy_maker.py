@@ -593,7 +593,7 @@ class PM:
                 
     def update_qTable_on_totals(self, par, gv):
         
-        total_cost_sum = -1 * sum(gv.C_a_cost_history)
+        total_cost_sum = -1 * (sum(gv.C_a_cost_history) + (sum(gv.C_n_i_cost_history) * par.infections_on_total_action_RL))
         
         gv.txt_output += f'\n\n  - Q-Table totals update (Total cost sum: {total_cost_sum}):'
 
@@ -601,7 +601,6 @@ class PM:
             state = el[0]
             action = el[1]
             prev = gv.q_table[state][action]
-            rel = 1
-            gv.q_table[state][action] = (gv.q_table[state][action]) + ((total_cost_sum * par.total_on_action_RL * rel))
-            gv.txt_output += f'\n    - ({state}, {action}) (rel: {rel}): {prev} -> {gv.q_table[state][action]}'
+            gv.q_table[state][action] = (gv.q_table[state][action] * (1 - par.alpha_RL)) + ((total_cost_sum * par.total_on_action_RL) * par.alpha_RL)
+            gv.txt_output += f'\n    - ({state}, {action}): {prev} -> {gv.q_table[state][action]}'
             

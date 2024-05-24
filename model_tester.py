@@ -12,7 +12,11 @@ class mt:
     def __init__(self):
         
         self.runs = 250
+        self.runs_to_test = 55
+        
         self.starting_epsilon_RL = 0.2
+
+        self.epsilon_RL_final_on = 1 - (self.runs_to_test / self.runs)
 
 
         self.start_time = datetime.now()
@@ -72,7 +76,7 @@ class mt:
                 mod.par.clear_q_table_memory = False
 
             
-            if i < int(runs * 0.625): epsilon_RL += (1 - starting_epsilon_RL) / int(runs * 0.625)
+            if i < int(runs * self.epsilon_RL_final_on): epsilon_RL += (1 - starting_epsilon_RL) / int(runs * self.epsilon_RL_final_on)
             mod.par.epsilon_RL = epsilon_RL
 
             
@@ -145,6 +149,8 @@ class mt:
             'Epoch txt': f'\n------- Epochs: {200}, Starting Epsilon: {starting_epsilon_RL} -----------------------------------------------------------------------------\n\n'
         }
 
+        rl_on_max = False
+
         for i in range(0, runs):
             
             plt.close('all')
@@ -163,8 +169,14 @@ class mt:
             else:
                 mod.par.clear_q_table_memory = False
 
+
             
-            if i < int(runs * 0.625): epsilon_RL += (1 - starting_epsilon_RL) / int(runs * 0.625)
+            if i < int(runs * self.epsilon_RL_final_on):
+                epsilon_RL += (1 - starting_epsilon_RL) / int(runs * self.epsilon_RL_final_on)
+            else:
+                mod.par.alpha_RL = 0
+                if not rl_on_max: print('Epsilon RL is at max')
+                rl_on_max = True
             mod.par.epsilon_RL = epsilon_RL
 
             
@@ -223,4 +235,4 @@ class mt:
 
 if __name__ == '__main__':
     mt = mt()
-    mt.run_epoch_parameter_to_change_arr([2, 3, 4, 5, 6])
+    mt.run_epoch_parameter_to_change_arr([1, 2, 3, 4, 5, 6, 7, 8])

@@ -80,7 +80,8 @@ class parameters:
 
         self.infection_slope_regr_len = 5
 
-        self.total_on_action_RL = 0.2
+        self.total_on_action_RL = 0.5
+        self.infections_on_total_action_RL = 0
 
         # Settings
         self.draw_conclusions = True
