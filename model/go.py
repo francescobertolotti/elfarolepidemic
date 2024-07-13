@@ -38,10 +38,10 @@ def go(par, gv, al, pm):
     if par.enablePM:
         pm.operationForDay(par, gv)
 
-
+    '''
     if gv.t == par.max_days:
        pm.update_qTable_on_totals(par, gv)
-
+    '''
 
 
 

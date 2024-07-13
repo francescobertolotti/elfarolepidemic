@@ -30,8 +30,9 @@ class parameters:
         self.people_memory_weight_arr = [0.5, 0.2, 0.1] # This is the weight agents give to each single event
         self.alpha = 0.2 # This is the weight to the new infected agents
         self.regression_type = 1 # Indicates the regression line degree for np.polyfit function (1 = Linear regression)
-        self.infection_randomness = 0.25 # this treshold changes the level contagius by a value rangin from -self.infection_randomness to self.infection_randomness
-
+        self.infection_randomness = 0.05 # this treshold changes the level contagius by a value rangin from -self.infection_randomness to self.infection_randomness
+        self.resistance_to_infection = [0.5, 0.3, 0.1] # [tipe1, tipe2, tipe3] % of people that resist to infection for each type of agent
+        self.resistance_to_infection_c_level = [0.1, 0, -0.1] # [tipe1, tipe2, tipe3] of resistance to infection for each type of agent
 
         # PM parameters
         self.enablePM = True # Enable Policy Maker
@@ -86,6 +87,9 @@ class parameters:
         # Settings
         self.draw_conclusions = True
         self.save_conclusions = True
+        self.save_chart = True
+        self.save_csv = True
+        self.save_q_table = True
         self.save_duplicate_q_table = True
 
         self.restore_parameters = False
@@ -96,3 +100,9 @@ class parameters:
         self.stored_q_table_id = 'last'
 
         self.clear_q_table_memory = False
+        self.epoch_name = 'epoch'
+        seed = 0
+    
+    def set_parameters(self, **kwargs):
+        for key, value in kwargs.items():
+            setattr(self, key, value)

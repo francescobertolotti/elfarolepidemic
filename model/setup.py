@@ -22,7 +22,13 @@ def setup(par, gv, al):
         if i > (par.n_persons * (1 - par.a2_faceMask0Agents)):
             new_person.facemaskType = 0
             
-
+        # Type of resistance to infection
+        if i <= (par.n_persons * par.resistance_to_infection[0]):
+            new_person.resistanceType = 0
+        if i > (par.n_persons * par.resistance_to_infection[0]) and i <= (par.n_persons * (1 - par.resistance_to_infection[2])):
+            new_person.facemaskType = 1
+        if i > (par.n_persons * (1 - par.resistance_to_infection[2])):
+            new_person.facemaskType = 2
 
         # Infected
         if (i) <= par.num_infected_persons: 

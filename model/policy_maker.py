@@ -1,6 +1,7 @@
 #import libraries
 import numpy as np
 import random
+import matplotlib.pyplot as plt
 
 class PM:
 
@@ -278,6 +279,57 @@ class PM:
         else:
             gv.a3_is_active_history.append(0)
 
+    def get_state(self, par, gv, infected_on_total = 0, slope_pre = True):
+        
+        if infected_on_total == 0: infected_on_total = gv.infected_attendance / par.n_persons
+        else: infected_on_total = infected_on_total
+
+        if infected_on_total >= 0 and infected_on_total < 0.25: quart_t = 0
+        elif infected_on_total >= 0.25 and infected_on_total < 0.5: quart_t = 1
+        elif infected_on_total >= 0.5 and infected_on_total < 0.75: quart_t = 2
+        elif infected_on_total >= 0.75: quart_t = 3
+        else:
+            print(f'Error in get_state:\n - f1: {infected_on_total >= 0 and infected_on_total < 0.25}\n - f2: {infected_on_total >= 0.25 and infected_on_total < 0.5}\n - f3: {infected_on_total >= 0.5 and infected_on_total < 0.75}\n - f4: {infected_on_total >= 0.75}\n - infected_on_total: {infected_on_total}')
+
+        quart_st_arr = [0, 3, 6, 9]
+        quart_st = quart_st_arr[quart_t]
+        
+        if slope_pre == True: slope = round(gv.regCoeff_q_learning(par)[0], 3)
+        else: slope = slope_pre
+
+        if slope > 0: slope_t = 0
+        elif slope == 0: slope_t = 1
+        elif slope < 0: slope_t = 2
+        
+        state = quart_st + slope_t
+
+        return state
+    
+    def predict_future_state(self, par, gv):
+        
+        infection_data = gv.contagious_history[-par.RL_PM_t_min:]
+        
+        infection_regr = gv.regLine(par, infection_data, par.RL_PM_t_min * 2)
+
+        infection_regr_last = infection_regr[-1]
+        if infection_regr[-1] < 0: infection_regr_last = 0    
+        if infection_regr[-1] > par.n_persons: infection_regr_last = par.n_persons    
+        
+        infected_on_total = infection_regr_last / par.n_persons
+
+        # slope = round(gv.regCoeff_q_learning(par, int(par.RL_PM_t_min / 5), infection_regr)[0], 3)
+        slope = round(gv.regCoeff_q_learning(par, int(par.RL_PM_t_min / 7), infection_data)[0], 3)
+        # print(slope)
+        # plt.plot(infection_regr)
+        # plt.plot(infection_data)
+        # plt.show()
+
+        future_state = self.get_state(par, gv, infected_on_total, slope)
+
+        gv.txt_output += f'\n  - Future state: {future_state}, Slope {slope}, Infected on totale {infected_on_total}, effect on q-table:'
+        
+        return future_state
+
     def update_RL_q_table_mode2(self, par, gv):
         action = self.current_RL_data['action']
         state = self.current_RL_data['state']
@@ -285,6 +337,8 @@ class PM:
 
         revenues = sum(gv.R_revenues_history[self.current_RL_data['start_date'] : (gv.t - 1)])
         costs = sum(gv.C_cost_history[self.current_RL_data['start_date'] : (gv.t - 1)])
+
+
 
         
 
@@ -345,7 +399,8 @@ class PM:
                 quart_st = quart_st_arr[quart_t]
                 
 
-                slope = round(gv.regCoeff_q_learning(par)[0], 3)
+                slope = round(gv.regCoeff_q_learning(par)[0])
+                
                 if slope > 0: slope_t = 0
                 elif slope == 0: slope_t = 1
                 elif slope < 0: slope_t = 2
@@ -416,22 +471,9 @@ class PM:
             if "aInitCheck" in self.operationsArr and gv.infected_attendance > 0 and gv.t > par.RL_PM_t_min:
                     
                 infected_on_total = gv.infected_attendance / par.n_persons
-
-                if infected_on_total >= 0 and infected_on_total < 0.25: quart_t = 0
-                elif infected_on_total >= 0.25 and infected_on_total < 0.5: quart_t = 1
-                elif infected_on_total >= 0.5 and infected_on_total < 0.75: quart_t = 2
-                elif infected_on_total >= 0.75 and infected_on_total <= 1: quart_t = 3
-
-                quart_st_arr = [0, 3, 6, 9]
-                quart_st = quart_st_arr[quart_t]
                 
-
-                slope = round(gv.regCoeff_q_learning(par)[0], 3)
-                if slope > 0: slope_t = 0
-                elif slope == 0: slope_t = 1
-                elif slope < 0: slope_t = 2
+                state = self.get_state(par, gv, infected_on_total)
                 
-                state = quart_st + slope_t
                 
                 # Compile currenti dict
                 current_dict = {}
@@ -553,10 +595,17 @@ class PM:
                     else:    
                         action = 0
                         current_max = -10000000000000000000000
+                        future_state = self.predict_future_state(par, gv)
                         for i, el in enumerate(q_table_i):
-                            if i in current_dict.keys() and el > current_max:
-                                current_max = el    
-                                action = i
+                            
+                            if i in current_dict.keys():
+                                c = el + gv.q_table[future_state][i]
+                                
+                                gv.txt_output += f'\n    - Action: {i}, State {state}, Element {el}, Future element {gv.q_table[future_state][i]}, Element + Future element {c}'
+                                
+                                if c > current_max:
+                                    current_max = c  
+                                    action = i
 
                         gv.action_on_max.append(1)
                         gv.action_on_random_zero.append(0)
@@ -573,7 +622,7 @@ class PM:
                 if current_dict[action][2] == 1:
                     self.a3Init_mode2(par, gv)
 
-                
+    
                 self.general_init(gv)
 
                 self.current_RL_data = {
@@ -590,7 +639,8 @@ class PM:
                 gv.action_on_random_zero.append(0)
                 gv.action_on_random.append(0)
 
-                
+
+    # Old
     def update_qTable_on_totals(self, par, gv):
         
         total_cost_sum = -1 * (sum(gv.C_a_cost_history) + (sum(gv.C_n_i_cost_history) * par.infections_on_total_action_RL))

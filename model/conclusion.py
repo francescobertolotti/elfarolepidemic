@@ -14,9 +14,9 @@ class conclusions:
         self.folder_location = f'{self.base_folder}/output/{self.folder_number}'
 
         self.output_location = f'{self.base_folder}/output'
-
+        self.epoch_name = par.epoch_name
         self.folder_number_epoch = self.get_epoch_folder_n()
-        self.folder_location_epoch = f'{self.base_folder}/output/epoch_{self.folder_number_epoch}'
+        self.folder_location_epoch = f'{self.base_folder}/output/{self.epoch_name}_{self.folder_number_epoch}'
         
         if par.save_conclusions: os.mkdir(self.folder_location)
 
@@ -30,8 +30,12 @@ class conclusions:
         ls = os.listdir(f'{self.base_folder}/output')
         dir_arr = []
         for el in ls:
-            if 'epoch' not in el and os.path.isdir(f'{self.base_folder}/output/{el}'):
+            try:
+                int(el)
                 dir_arr.append(int(str(el)))
+            except:
+                pass
+                
         if len(dir_arr) > 0:
             n = max(dir_arr) + 1
         else:
@@ -42,7 +46,7 @@ class conclusions:
     def get_epoch_folder_n(self):
         cont = 0
         for el in os.listdir(f'{self.base_folder}/output'):
-            if 'epoch' in el:
+            if self.epoch_name in el:
                 cont += 1
         return (cont + 1)
 
@@ -68,7 +72,7 @@ class conclusions:
         plt.plot(arr_x, gv.recovered_agents_history, label=f"Recovered people every day", color="#00e5f2")
         plt.legend(loc="upper left", bbox_to_anchor=(0.175, -0.1), ncol=1)
         plt.tight_layout()
-        if par.save_conclusions: fig.savefig(f'{self.folder_location}/simulation.png')
+        if par.save_conclusions and par.save_chart: fig.savefig(f'{self.folder_location}/simulation.png')
         if par.draw_conclusions: plt.show()
         
         plt.clf()
@@ -107,7 +111,7 @@ class conclusions:
         axs[3, 0].set_ylabel('PM Action 3 costs')
 
         plt.subplots_adjust(wspace=0.0, hspace=10, right=0.7)
-        if par.save_conclusions: fig.savefig(f'{self.folder_location}/costs.png')
+        if par.save_conclusions and par.save_chart: fig.savefig(f'{self.folder_location}/costs.png')
         if par.draw_conclusions: plt.show()
 
         plt.clf()
@@ -121,6 +125,7 @@ class conclusions:
         if gv.is_epoch:
             arr_epoch = [gv.epoch_id for i in range(0, par.max_days)]
             csv_dict['Epoch id'] = arr_epoch
+
         csv_dict['t'] = gv.t_history
         csv_dict['Attendance'] = gv.attendance_history
         csv_dict['Contagion'] = gv.contagious_history
@@ -190,8 +195,8 @@ class conclusions:
         self.folder_number = self.get_folder_n()
         self.folder_location = f'{self.base_folder}/output/{self.folder_number}'
         if par.save_conclusions: os.mkdir(self.folder_location)
-        self.save_current_q_table(gv)
-        self.save_parameters(par)
+        if par.save_conclusions and par.save_q_table: self.save_current_q_table(gv)
+        if par.save_conclusions and not gv.is_epoch: self.save_parameters(par)
         self.CSV_data(par, gv)
         self.Chart(par, gv)
         self.Chart_cost(par, gv)

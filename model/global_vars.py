@@ -109,16 +109,24 @@ class glob_vars:
 
         return res_arr
 
-    def last_infected(self, n):
-        if n >= len(self.contagious_history):
-            return self.contagious_history  # Se n è maggiore o uguale alla lunghezza dell'array, restituisce l'intero array
+    def last_infected(self, n, arr = []):
+        if arr == []: arr_l_i = self.contagious_history
+        else: arr_l_i = arr
+
+        if n >= len(arr_l_i):
+            return arr_l_i  # Se n è maggiore o uguale alla lunghezza dell'array, restituisce l'intero array
         else:
-            return self.contagious_history[-n:]
+            return arr_l_i[-n:]
 
 
-    def regCoeff_q_learning(self, par, arr_y = []):
-        if arr_y == []: arr_y = self.last_infected(n=par.infection_slope_regr_len)
+    def regCoeff_q_learning(self, par, n_pre = 0, arr_y_pre = []):
+        if n_pre == 0: n = par.infection_slope_regr_len
+        else: n = n_pre
+
+        if len(arr_y_pre) > 0: arr_y = self.last_infected(n)
+        else: arr_y = self.last_infected(n, arr_y_pre)
         
+        # print(arr_y)
         arr_x = np.arange(1, len(arr_y) + 1)
         
         with warnings.catch_warnings():
@@ -187,7 +195,8 @@ class glob_vars:
                 else:
                     print('No stored q-table to start')
                     json_table_id = 'First or new'
-        
+            else:
+                json_table_id = 'First or new'
             return json_table_id
 
     def save_q_table(self, par, precedent_id):

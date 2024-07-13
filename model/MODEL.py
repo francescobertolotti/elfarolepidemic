@@ -17,14 +17,15 @@ from model.policy_maker import *
 class model():
     def __init__(self, my_seed, is_epoch: bool = False):
         
-        random.seed(my_seed)
-        np.random.seed(seed=my_seed)
+        seed = random.seed(my_seed)
+        seed = np.random.seed(seed=my_seed)
 
         self.qTable = np.zeros([2,4])
 
 
         self.al = agents_list()
         self.par = parameters()
+        self.par.seed = my_seed
         self.gv = glob_vars(self.par)
         if self.par.restore_parameters:
             self.gv.restore_parameters(par=self.par)

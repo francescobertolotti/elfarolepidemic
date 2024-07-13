@@ -11,14 +11,14 @@ class mt:
     
     def __init__(self):
         
-        self.runs = 250
-        self.runs_to_test = 55
+        self.runs = 100
+        self.runs_to_test = 30
         
         self.starting_epsilon_RL = 0.2
 
         self.epsilon_RL_final_on = 1 - (self.runs_to_test / self.runs)
 
-
+        self.epoch_name = 'epoch'
         self.start_time = datetime.now()
 
     def end(self):
@@ -155,14 +155,18 @@ class mt:
             
             plt.close('all')
 
+            # seed = 2008
             seed = np.random.randint(1000000)
+            print(seed)
             mod = model(seed, is_epoch=True)
+            mod.par.epoch_name = self.epoch_name
             mod.par.draw_conclusions = False
-            mod.par.save_conclusions = True
+            mod.par.save_chart = True
             
+
             # Parameter to edit
             mod.par.a2_cost = cost
-
+            self.epoch_name = f'epoch_a2_cost_{str(cost).replace(".", " ")}'
 
             if i == 0:
                 mod.par.clear_q_table_memory = True
@@ -175,11 +179,10 @@ class mt:
                 epsilon_RL += (1 - starting_epsilon_RL) / int(runs * self.epsilon_RL_final_on)
             else:
                 mod.par.alpha_RL = 0
-                if not rl_on_max: print('Epsilon RL is at max')
+                if not rl_on_max: print(' - Epsilon RL is at max')
                 rl_on_max = True
             mod.par.epsilon_RL = epsilon_RL
 
-            
             mod.run(seed)
             
             epoch_dict['Epoch'].append(i + 1)
@@ -235,4 +238,4 @@ class mt:
 
 if __name__ == '__main__':
     mt = mt()
-    mt.run_epoch_parameter_to_change_arr([1, 2, 3, 4, 5, 6, 7, 8])
+    mt.run_epoch_parameter_to_change_arr([19, 20])
