@@ -186,6 +186,7 @@ class conclusions:
     def save_current_q_table(self, gv):
         with open(f'{self.folder_location}/current_q_table.json', 'w') as f:
             json.dump(gv.export_q_table, f, indent=4)
+        
 
 
     # Epoch export

@@ -60,13 +60,13 @@ class parameters:
         self.a2_faceMask2Perc = 0.5
         self.a2_reductionDuration = 1
         self.a2_InfectedTreshold = 0.1 # Percentage of infected above to activate strategy a2 for PM, calculated on self.n_persons
-        self.a2_cost = 1
+        self.a2_cost = 20
 
         # PM a3
-        self.a3_testFailUnder = 0.45 # Nei casi in cui fa dovrebbe funzuionare comunque sbaglia e fa entrare
+        self.a3_testFailUnder = 0.4 # Nei casi in cui fa dovrebbe funzuionare comunque sbaglia e fa entrare
         self.a3_reductionDuration = 1
         self.a3_InfectedTreshold = 0.2
-        self.a3_cost = 50000
+        self.a3_cost = 100000
 
         # PM Reinforcement leaning
         self.enableRL = True
@@ -75,7 +75,11 @@ class parameters:
         self.a_reductionDuration = 15 # General reduction duration for self.RL_mode = 2
 
         self.epsilon_RL = 0.2
-        self.alpha_RL = 0.3
+        
+        # If seed changes
+        # self.alpha_RL = 0.3
+        # If seed is static
+        self.alpha_RL = 1
 
         self.RL_PM_t_min = 15
 

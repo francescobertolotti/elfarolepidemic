@@ -203,8 +203,8 @@ class PM:
         state = self.current_RL_data['state']
         action = self.current_RL_data['action']
         
-        revenues = sum(gv.R_revenues_history[self.current_RL_data['start_date'] : (gv.t - 1)])
-        costs = sum(gv.C_cost_history[self.current_RL_data['start_date'] : (gv.t - 1)])
+        revenues = sum(gv.R_revenues_history[self.current_RL_data['start_date'] : (gv.t)])
+        costs = sum(gv.C_cost_history[self.current_RL_data['start_date'] : (gv.t)])
 
         reward = revenues - costs
         
@@ -238,6 +238,23 @@ class PM:
         gv.a3_is_active = True
         gv.a3_used_at_least_once = True
 
+    def update_delta_infections_q_table_mode2(self, par, gv):
+        action = self.current_RL_data['action']
+        state = self.current_RL_data['state']
+        before_a_infections = self.current_RL_data['before_a_infections']
+        delta_infections = gv.infected_attendance - before_a_infections
+
+        prev = gv.q_table_delta_infections[state][action]
+        '''
+        prev = gv.q_table[state][action]
+        gv.q_table[state][action] = (gv.q_table[state][action] * (1 - par.alpha_RL)) + (par.alpha_RL * delta_infections)
+        gv.txt_output += f'\n\n  - Updating Q-Table: ({action}, {state}) (a, s)\n    Old: {prev}, Next: {gv.q_table[state][action]}, Costs: {costs}, Revenues {revenues}'
+        #print(gv.t, gv.q_table[state][action], state, action, gv.q_table[state])
+        #print('\n\n')
+        '''
+        gv.q_table_delta_infections[state][action] = delta_infections
+        gv.txt_output += f'\n\n  - Updating Delta-Infections-Q-Table: ({action}, {state}) (a, s)\n    Old: {prev}, Next: {gv.q_table_delta_infections[state][action]}'
+
     def aEnd_mode2(self, par, gv):
         
         if gv.t > (self.aStartingDayReduction + par.a_reductionDuration):
@@ -257,6 +274,7 @@ class PM:
                 gv.a3_is_active = False
 
             self.update_RL_q_table_mode2(par, gv)
+            self.update_delta_infections_q_table_mode2(par, gv)
 
     def general_for_day(self, par, gv):
         
@@ -289,7 +307,7 @@ class PM:
         elif infected_on_total >= 0.5 and infected_on_total < 0.75: quart_t = 2
         elif infected_on_total >= 0.75: quart_t = 3
         else:
-            print(f'Error in get_state:\n - f1: {infected_on_total >= 0 and infected_on_total < 0.25}\n - f2: {infected_on_total >= 0.25 and infected_on_total < 0.5}\n - f3: {infected_on_total >= 0.5 and infected_on_total < 0.75}\n - f4: {infected_on_total >= 0.75}\n - infected_on_total: {infected_on_total}')
+            print(f'Error in get_state:\n - f1: {infected_on_total >= 0 and infected_on_total < 0.25}\n - f2: {infected_on_total >= 0.25 and infected_on_total < 0.5}\n - f3: {infected_on_total >= 0.5 and infected_on_total < 0.75}\n - f4: {infected_on_total >= 0.75}\n - infected_on_total: {infected_on_total}\n - infected: {gv.infected_attendance}\n - n_persons: {par.n_persons}')
 
         quart_st_arr = [0, 3, 6, 9]
         quart_st = quart_st_arr[quart_t]
@@ -305,6 +323,7 @@ class PM:
 
         return state
     
+    '''
     def predict_future_state(self, par, gv):
         
         infection_data = gv.contagious_history[-par.RL_PM_t_min:]
@@ -325,18 +344,41 @@ class PM:
         # plt.show()
 
         future_state = self.get_state(par, gv, infected_on_total, slope)
+        print(future_state, infected_on_total, slope, )
 
         gv.txt_output += f'\n  - Future state: {future_state}, Slope {slope}, Infected on totale {infected_on_total}, effect on q-table:'
         
         return future_state
+    '''
 
+    def predict_future_state(self, par, gv, current_state, action):
+
+        current_infections = gv.infected_attendance
+        delta_infections = gv.q_table_delta_infections[current_state, action]
+        final_infections = current_infections + delta_infections
+
+        if final_infections < 0:
+            final_infections = 0
+            infected_on_total = 0
+        else:
+            infected_on_total = final_infections / par.n_persons
+
+        if current_infections == final_infections: slope = 0
+        elif final_infections > current_infections: slope = 1
+        elif final_infections < current_infections: slope = -1
+
+        future_state = self.get_state(par, gv, infected_on_total, slope)
+
+        return future_state
+
+        
     def update_RL_q_table_mode2(self, par, gv):
         action = self.current_RL_data['action']
         state = self.current_RL_data['state']
         dict_actions = self.current_RL_data['dict_action']
 
-        revenues = sum(gv.R_revenues_history[self.current_RL_data['start_date'] : (gv.t - 1)])
-        costs = sum(gv.C_cost_history[self.current_RL_data['start_date'] : (gv.t - 1)])
+        revenues = sum(gv.R_revenues_history[self.current_RL_data['start_date'] : (gv.t)])
+        costs = sum(gv.C_cost_history[self.current_RL_data['start_date'] : (gv.t)])
 
 
 
@@ -348,11 +390,13 @@ class PM:
 
         
         prev = gv.q_table[state][action]
-        gv.q_table[state][action] = (gv.q_table[state][action] * (1 - par.alpha_RL)) + (par.alpha_RL * reward)
+        gv.q_table[state][action] = round((gv.q_table[state][action] * (1 - par.alpha_RL)) + (par.alpha_RL * reward), 2)
         self.states_actions_history.append([state, action])
         gv.txt_output += f'\n\n  - Updating Q-Table: ({action}, {state}) (a, s)\n    Old: {prev}, Next: {gv.q_table[state][action]}, Costs: {costs}, Revenues {revenues}'
         #print(gv.t, gv.q_table[state][action], state, action, gv.q_table[state])
         #print('\n\n')
+
+    
 
     def operationForDay(self, par, gv):
         
@@ -595,13 +639,29 @@ class PM:
                     else:    
                         action = 0
                         current_max = -10000000000000000000000
-                        future_state = self.predict_future_state(par, gv)
+                        
                         for i, el in enumerate(q_table_i):
                             
                             if i in current_dict.keys():
-                                c = el + gv.q_table[future_state][i]
                                 
-                                gv.txt_output += f'\n    - Action: {i}, State {state}, Element {el}, Future element {gv.q_table[future_state][i]}, Element + Future element {c}'
+                                future_state = self.predict_future_state(par, gv, state, i)
+
+                                mean_c_arr = []
+                                for x,fel in enumerate(gv.q_table[future_state]):
+                                    if x in current_dict.keys():
+                                        if fel != 0:
+                                            mean_c_arr.append(el)
+                                        else:
+                                            if future_state >= 10:
+                                                mean_c_arr.append(1000000)
+                                            else:
+                                                mean_c_arr.append(0)
+
+                                # future_element = np.mean(mean_c_arr)
+                                future_element = max(mean_c_arr)
+                                c = el + future_element
+                                
+                                gv.txt_output += f'\n    - Action: {i}, State {state}, Element {el}, Future element {future_element}, Element + Future element {c}'
                                 
                                 if c > current_max:
                                     current_max = c  
@@ -612,7 +672,6 @@ class PM:
                         gv.action_on_random.append(0)
                         gv.txt_output += f'\n  - Action on max: {action}, State {state}, Aviable {current_dict.keys()}, current max: {current_max}, q-table: {gv.q_table[state]}'
                         
-                
                 
 
                 if current_dict[action][0] == 1:
@@ -629,7 +688,8 @@ class PM:
                     'start_date': (gv.t - 1),
                     'state': state,
                     'action': action,
-                    'dict_action': current_dict[action]
+                    'dict_action': current_dict[action],
+                    'before_a_infections': gv.infected_attendance
                 }
 
                 gv.txt_output += f'\n  - Current RL data: {self.current_RL_data}'
@@ -651,6 +711,6 @@ class PM:
             state = el[0]
             action = el[1]
             prev = gv.q_table[state][action]
-            gv.q_table[state][action] = (gv.q_table[state][action] * (1 - par.alpha_RL)) + ((total_cost_sum * par.total_on_action_RL) * par.alpha_RL)
+            gv.q_table[state][action] = round((gv.q_table[state][action] * (1 - par.alpha_RL)) + ((total_cost_sum * par.total_on_action_RL) * par.alpha_RL), 2)
             gv.txt_output += f'\n    - ({state}, {action}): {prev} -> {gv.q_table[state][action]}'
             

@@ -154,15 +154,14 @@ class mt:
         for i in range(0, runs):
             
             plt.close('all')
-
-            # seed = 2008
             seed = np.random.randint(1000000)
+            
+            # seed = 2002
             print(seed)
             mod = model(seed, is_epoch=True)
             mod.par.epoch_name = self.epoch_name
             mod.par.draw_conclusions = False
             mod.par.save_chart = True
-            
 
             # Parameter to edit
             mod.par.a2_cost = cost
@@ -172,8 +171,6 @@ class mt:
                 mod.par.clear_q_table_memory = True
             else:
                 mod.par.clear_q_table_memory = False
-
-
             
             if i < int(runs * self.epsilon_RL_final_on):
                 epsilon_RL += (1 - starting_epsilon_RL) / int(runs * self.epsilon_RL_final_on)
@@ -238,4 +235,4 @@ class mt:
 
 if __name__ == '__main__':
     mt = mt()
-    mt.run_epoch_parameter_to_change_arr([19, 20])
+    mt.run_epoch_parameter_to_change_arr([17, 18, 19, 20])

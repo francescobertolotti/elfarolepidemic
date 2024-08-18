@@ -51,7 +51,9 @@ class glob_vars:
 
         # Q - Learning
         if par.RL_mode == 1: self.q_table = np.zeros([12, 3])
-        else: self.q_table = np.zeros([12, 12])
+        else:
+            self.q_table = np.zeros([12, 12])
+            self.q_table_delta_infections = np.zeros([12, 12])
 
         self.export_q_table = {}
 
@@ -190,7 +192,10 @@ class glob_vars:
                         json_table_id = par.stored_q_table_id - 1
                     
                     q_table_raw = json_q_table['data'][json_table_id]['q-table']
+                    q_table_raw_delta_infections = json_q_table['data'][json_table_id]['q-table-delta-infections']
+                    
                     self.q_table = np.array(q_table_raw)
+                    self.q_table_delta_infections = np.array(q_table_raw_delta_infections)
                 
                 else:
                     print('No stored q-table to start')
@@ -208,7 +213,8 @@ class glob_vars:
             self.export_q_table = {
                    'id': str(len(arr) + 1),
                    'precedent': str(precedent_id),
-                   'q-table': self.q_table.tolist()
+                   'q-table': self.q_table.tolist(),
+                   'q-table-delta-infections': self.q_table_delta_infections.tolist()
                 }
             arr.append(self.export_q_table)
             
@@ -224,12 +230,12 @@ class glob_vars:
     def calculate_value(self, par):
         if par.enablePM:
 
-            if par.enableA1 and self.a1_is_active: a1_cost = self.actualCapacity * par.a1_cost * 1 # Da rivedere
+            if par.enableA1 and self.a1_is_active: a1_cost = round(self.actualCapacity * par.a1_cost * 1, 2) # Da rivedere
             else: a1_cost = 0
 
             self.a1_cost_history.append(a1_cost)
             
-            if par.enableA2 and self.a2_is_active: a2_cost = self.actualCapacity * par.a2_cost # Da sistemare con suddivisione mascherine
+            if par.enableA2 and self.a2_is_active: a2_cost = round(self.actualCapacity * par.a2_cost, 2) # Da sistemare con suddivisione mascherine
             else: a2_cost = 0
             
             self.a2_cost_history.append(a2_cost)
