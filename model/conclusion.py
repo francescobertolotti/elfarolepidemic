@@ -154,7 +154,8 @@ class conclusions:
                 csv_dict['Random on max'] = gv.action_on_max
 
             csv_dict['Total A costs'] = gv.C_a_cost_history
-            csv_dict['Total costs'] = gv.C_cost_history
+        
+        csv_dict['Total costs'] = gv.C_cost_history
 
         self.csv_dict = csv_dict
         

@@ -17,8 +17,8 @@ class parameters:
         self.strategyTwo = 1 - self.strategyOne # StrategyOne: Partialy with linearRegression
 
         # Agent strategyTwo parameters
-        self.useRegrFrom = 10 # Indicates the day from which the regression line will be used
-        self.useRegrFor = 1 # Of the total output of the strategy defined by the agent each week, the value defined by the linear regression of the previous ones impacts by a percentage defined by the parameter
+        self.useRegrFrom = 5 # Indicates the day from which the regression line will be used
+        self.useRegrFor = 0.5 # Of the total output of the strategy defined by the agent each week, the value defined by the linear regression of the previous ones impacts by a percentage defined by the parameter
 
         # Epidemic parameters
         self.num_infected_persons = 100 # Identifies the number of starting contagious people
@@ -60,7 +60,8 @@ class parameters:
         self.a2_faceMask2Perc = 0.5
         self.a2_reductionDuration = 1
         self.a2_InfectedTreshold = 0.1 # Percentage of infected above to activate strategy a2 for PM, calculated on self.n_persons
-        self.a2_cost = 20
+        self.a2_cost_1 = 10
+        self.a2_cost_2 = 20
 
         # PM a3
         self.a3_testFailUnder = 0.4 # Nei casi in cui fa dovrebbe funzuionare comunque sbaglia e fa entrare

@@ -230,14 +230,26 @@ class glob_vars:
     def calculate_value(self, par):
         if par.enablePM:
 
-            if par.enableA1 and self.a1_is_active: a1_cost = round(self.actualCapacity * par.a1_cost * 1, 2) # Da rivedere
+            if par.enableA1 and self.a1_is_active: a1_cost = round((par.capacity - self.actualCapacity) * par.a1_cost * 1, 2) # Da rivedere
             else: a1_cost = 0
 
             self.a1_cost_history.append(a1_cost)
             
-            if par.enableA2 and self.a2_is_active: a2_cost = round(self.actualCapacity * par.a2_cost, 2) # Da sistemare con suddivisione mascherine
+            if par.enableA2 and self.a2_is_active:
+                # a2_cost = round(self.actualCapacity * par.a2_cost, 2) # Da sistemare con suddivisione mascherine
+                a2_type_0 = 0
+                a2_type_1 = 0
+                a2_type_2 = 0
+                for agent in self.present_agents:
+                    if agent.facemaskType == 0: a2_type_0 += 1
+                    elif agent.facemaskType == 1: a2_type_1 += 1
+                    elif agent.facemaskType == 2: a2_type_2 += 1
+                a2_cost = round((a2_type_1 * par.a2_cost_1) + (a2_type_2 * par.a2_cost_2), 2)
+
             else: a2_cost = 0
             
+            
+
             self.a2_cost_history.append(a2_cost)
             
             if par.enableA3 and self.a3_is_active and self.a3_cost_is_relevant:
@@ -249,7 +261,11 @@ class glob_vars:
 
             C_a_cost = a1_cost + a2_cost + a3_cost
             self.C_a_cost_history.append(C_a_cost)
-
+        else:
+            a1_cost = 0
+            a2_cost = 0
+            a3_cost = 0
+            C_a_cost = 0
 
         C_n_i_cost = par.delta * self.new_infected_history[-1]
         self.C_n_i_cost_history.append(C_n_i_cost)

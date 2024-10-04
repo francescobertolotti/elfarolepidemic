@@ -154,9 +154,9 @@ class mt:
         for i in range(0, runs):
             
             plt.close('all')
-            seed = np.random.randint(1000000)
+            # seed = np.random.randint(1000000)
             
-            # seed = 2002
+            seed = 2002
             print(seed)
             mod = model(seed, is_epoch=True)
             mod.par.epoch_name = self.epoch_name
@@ -164,8 +164,8 @@ class mt:
             mod.par.save_chart = True
 
             # Parameter to edit
-            mod.par.a2_cost = cost
-            self.epoch_name = f'epoch_a2_cost_{str(cost).replace(".", " ")}'
+            mod.par.a3_cost = cost
+            self.epoch_name = f'epoch_a3_cost_{str(cost).replace(".", " ")}'
 
             if i == 0:
                 mod.par.clear_q_table_memory = True
@@ -235,4 +235,5 @@ class mt:
 
 if __name__ == '__main__':
     mt = mt()
-    mt.run_epoch_parameter_to_change_arr([17, 18, 19, 20])
+    # mt.run_epoch_parameter_to_change_arr([0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2])
+    mt.run_epoch_parameter_to_change_arr([70000, 80000, 60000 ])

@@ -35,6 +35,12 @@ class Person:
     def regrLinStrategyMethod(self, par, gv):
         regr = gv.regLine(par, self.person_memory)
         regr_output = regr[len(regr) - 1]
+
+        if regr_output < 0:
+            regr_output = 0
+        elif regr_output > 1:
+            regr_output = self.defaultStrategyMethod()
+
         return (regr_output * par.useRegrFor) + (self.defaultStrategyMethod() * (1 - par.useRegrFor))
     
     def randomStrategyMethod(self):

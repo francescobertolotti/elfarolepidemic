@@ -78,7 +78,7 @@ class PM:
             self.operationsArr.remove("a1InitCheck")
             self.PM_interactionCounter += 1
             self.a1StartingDayReduction = gv.t
-            gv.actualCapacity = par.capacity * (1 - par.a1_reductionPerc)
+            gv.actualCapacity = int(par.capacity * (1 - par.a1_reductionPerc))
             self.operationsArr.append("a1EndCheck")
             self.action_is_active = True
             gv.a1_is_active = True
@@ -228,7 +228,7 @@ class PM:
         
 
     def a1Init_mode2(self, par, gv):
-        gv.actualCapacity = par.capacity * (1 - par.a1_reductionPerc)
+        gv.actualCapacity = int(par.capacity * (1 - par.a1_reductionPerc))
         gv.a1_is_active = True
 
     def a2Init_mode2(self, par, gv):
